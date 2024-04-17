@@ -3,6 +3,7 @@
 /dist
 /.hbuilderx
 /.vite
+/unpackage
 
 # local env files
 .env.development
