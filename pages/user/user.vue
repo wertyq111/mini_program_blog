@@ -9,12 +9,8 @@
 			<view class="username">
 				<template v-if="isEdit">
 					<view class="nickname-line">
-						<input :value="nickname" 
-						class="nickname" 
-						type="nickname" 
-						placeholder="请输入昵称" 
-						@change="updateNickname"
-						:focus="isFocus"/>
+						<input :value="nickname" class="nickname" type="nickname" placeholder="请输入昵称"
+							@change="updateNickname" :focus="isFocus" />
 					</view>
 				</template>
 				<template v-else>
@@ -94,13 +90,15 @@
 			phoneNumber: "15088631304"
 		})
 	}
+	
 
 	// 获取用户信息
 	const getUserInfo = async () => {
 		user.value = uni.getStorageSync('user')
 
 		if (user.value.member) {
-			avatarUrl.value = user.value.member.avatar
+			console.log(user.value.member.avatar);
+			if (user.value.member.avatar !== "") { avatarUrl.value = user.value.member.avatar }
 			nickname.value = user.value.member.nickname
 		}
 
@@ -201,7 +199,7 @@
 
 	// 获取用户微信头像
 	const onChooseAvatar = (e) => {
-		if(user.value) {
+		if (user.value) {
 			// 将数据赋值
 			let url = e.detail.avatarUrl
 			avatarUrl.value = url
@@ -226,7 +224,8 @@
 			suffix = avatarPath.substring(avatarPath.lastIndexOf('.'));
 		}
 
-		qiniuParam.key = "userAvatar/" + user.value.id + "/" + new Date().getTime() + Math.floor(Math.random() * 1000) +
+		qiniuParam.key = "userAvatar/" + user.value.id + "/" + new Date().getTime() + Math.floor(Math.random() *
+				1000) +
 			suffix;
 		uni.uploadFile({
 			url: 'https://up.qiniup.com', //此处为华北地区
@@ -245,8 +244,10 @@
 					id: user.value.member.id,
 					avatar: "http://cdn.chouy.xyz/" + pic.key
 				}
-				let result = await requestApi('editMember', params, {method: 'post'}, true)
-				if(result.id) {
+				let result = await requestApi('editMember', params, {
+					method: 'post'
+				}, true)
+				if (result.id) {
 					uni.showToast({
 						title: "更新成功",
 						icon: "none"
@@ -262,20 +263,22 @@
 			}
 		});
 	}
-	
+
 	// watch(nickname, (currVal, oldVal) => {
 	// 	console.log(currVal);
 	// }) 
 
 	const updateNickname = async (e) => {
-		let text =  e.detail.value
-		if(text && text !== nickname.value) {
+		let text = e.detail.value
+		if (text && text !== nickname.value) {
 			let params = {
 				id: user.value.member.id,
 				nickname: text
 			}
-			let res = await requestApi('editMember', params, {method: 'post'}, true)
-			if(res.id) {
+			let res = await requestApi('editMember', params, {
+				method: 'post'
+			}, true)
+			if (res.id) {
 				uni.showToast({
 					title: "更新成功",
 					icon: "none"
@@ -285,11 +288,11 @@
 				uni.removeStorageSync('user')
 				uni.setStorageSync('user', user.value)
 			}
-		} 
-		
+		}
+
 		isEdit.value = false
 	}
-	
+
 	getUserInfo()
 </script>
 

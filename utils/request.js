@@ -1,5 +1,6 @@
-const BASE_URL = "https://tea.qingnian8.com/api"
-const LOGIN_URL = "http://10.10.9.184:3925/api"
+import {LOCAL_URL, NET_URL} from "@/utils/config.js"
+const BASE_URL = NET_URL
+const LOGIN_URL = LOCAL_URL
 const HEADERS = {
 	Authorization: "",
 	"access-key": "uniappstudy1458"

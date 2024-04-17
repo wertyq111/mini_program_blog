@@ -104,10 +104,8 @@
 		})
 		uni.setStorageSync('user', user)
 		if(uni.getStorageSync('user')) {
-			let redirectUrl = redirectUrl.value || "pages/"
-			uni.reLaunch({
-				url: "/" + redirectUrl.value
-			})
+			let url = "/pages/user/user"
+			uni.reLaunch({url})
 		}
 	}
 </script>
