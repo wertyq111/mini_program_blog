@@ -3,7 +3,9 @@
 /dist
 /.hbuilderx
 /.vite
+/.idea
 /unpackage
+/utils/config.js
 
 # local env files
 .env.development
