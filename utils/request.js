@@ -1,9 +1,7 @@
-import {LOCAL_URL, NET_URL} from "@/utils/config.js"
-const BASE_URL = NET_URL
-const LOGIN_URL = LOCAL_URL
+import {BASE_URL} from "@/utils/config.js"
+
 const HEADERS = {
-	Authorization: "",
-	"access-key": "uniappstudy1458"
+	Authorization: ""
 }
 
 export function request(url, data = {}, config = {}) {
@@ -21,22 +19,14 @@ export function request(url, data = {}, config = {}) {
 
 	let route = curPage[curPage.length - 1].route; //获取当前页面的路由
 	// 如果没有登录自动跳转到登录页面
-	if(!uni.getStorageSync('token') && url !== 'login:/easywechat/mini_program/authorizations') {
+	if(!uni.getStorageSync('user') && url != '/users/getUserInfo' && url !== '/easywechat/mini_program/authorizations') {
 		uni.navigateTo({
 			url: "/pages/login/login?url=" + route
 		})
 		return false
 	}
 	
-	let target = "net"
-	
-	if(url.search(/^login\:/i) >= 0) {
-		url = LOGIN_URL + url.replace(/login\:/, "")
-		target = "local"
-	} else {
-		url = BASE_URL + url;
-	}
-	
+	url = BASE_URL + url;
 
 	header = Object.assign({}, HEADERS, header);
 	
@@ -47,7 +37,7 @@ export function request(url, data = {}, config = {}) {
 			method,
 			header,
 			success: res => {
-				let code = target === 'net' ? res.data.errCode : res.data.code
+				let code = res.data.code
 				if (code === 0) {
 					resolve(res.data.data)
 				} else if (code === 400) {
@@ -58,7 +48,7 @@ export function request(url, data = {}, config = {}) {
 					})
 					reject(res.data)
 				} else {
-					let errMsg = target === 'net' ? res.data.errMsg : res.data.data ? res.data.data.message : res.data.msg
+					let errMsg = res.data.data ? res.data.data.message : res.data.msg
 					uni.showToast({
 						title: errMsg,
 						icon: "none"

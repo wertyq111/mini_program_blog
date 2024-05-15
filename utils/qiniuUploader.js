@@ -2,7 +2,7 @@ import { requestApi } from '@/api/apis.js';
 
 const upload_url = 'https://up.qiniup.com'
 
-const download_url = 'http://cdn.chouy.xyz'
+const download_url = 'https://cdn.chouy.xyz'
 
 const qiniuParam = {
 	token: "",

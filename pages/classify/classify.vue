@@ -10,9 +10,9 @@
 <script setup>
 	import { ref } from 'vue';
 	import { requestApi } from '@/api/apis.js';
-	
+
 	const classifyList = ref([]);
-	
+
 	// 获取专题图片
 	const getClassify = async () => {
 		classifyList.value = await requestApi("classify", {"pageSize": 100});
@@ -27,7 +27,7 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 15rpx;
-		
+
 	}
 </style>
 

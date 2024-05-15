@@ -54,20 +54,14 @@
 </template>
 
 <script setup>
-	import {
-		getNavBarHeight
-	} from '@/utils/system.js'
-	import {
-		requestApi
-	} from '@/api/apis.js';
-	import {
-		upload
-	} from '@/utils/qiniuUploader.js';
+	import { getNavBarHeight } from '@/utils/system.js'
+	import { requestApi } from '@/api/apis.js';
+	import UniIcons from "../../uni_modules/uni-icons/components/uni-icons/uni-icons.vue";
 
 	const token = ref(uni.getStorageSync('token') || null)
 	const userInfo = ref(null)
 	const user = ref(null)
-	const avatarUrl = ref("http://cdn.chouy.xyz/webAvatar/11686107681474364.jpg")
+	const avatarUrl = ref("https://cdn.chouy.xyz/webAvatar/11686107681474364.jpg")
 	const nickname = ref("微信小程序用户")
 	const isEdit = ref(false)
 	const isFocus = ref(false)
@@ -90,14 +84,13 @@
 			phoneNumber: "15088631304"
 		})
 	}
-	
+
 
 	// 获取用户信息
 	const getUserInfo = async () => {
 		user.value = uni.getStorageSync('user')
 
 		if (user.value.member) {
-			console.log(user.value.member.avatar);
 			if (user.value.member.avatar !== "") { avatarUrl.value = user.value.member.avatar }
 			nickname.value = user.value.member.nickname
 		}
@@ -242,7 +235,7 @@
 				let pic = JSON.parse(res.data)
 				let params = {
 					id: user.value.member.id,
-					avatar: "http://cdn.chouy.xyz/" + pic.key
+					avatar: "https://cdn.chouy.xyz/" + pic.key
 				}
 				let result = await requestApi('editMember', params, {
 					method: 'post'
@@ -266,7 +259,7 @@
 
 	// watch(nickname, (currVal, oldVal) => {
 	// 	console.log(currVal);
-	// }) 
+	// })
 
 	const updateNickname = async (e) => {
 		let text = e.detail.value

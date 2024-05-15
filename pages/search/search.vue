@@ -154,7 +154,6 @@ const initParams = (value) => {
 onReachBottom(()=>{
 	if(noData.value) return
 	queryParams.value.pageNum++
-	console.log(queryParams.value);
 	searchData()
 })
 

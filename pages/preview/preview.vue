@@ -6,7 +6,7 @@
 			</swiper-item>
 		</swiper>
 		<view class="mask" v-if="maskStatus">
-			<go-to :url="isShare ? '/pages/classify/classify' : null"/>
+			<go-to :url="isShare ? '/pages/classify/classify' : ''"/>
 			<view class="count">{{ currentIndex + 1 }} / {{ classList.length }}</view>
 			<view class="time">
 				<uni-dateformat :date="new Date()" format="hh:mm"></uni-dateformat>
@@ -123,12 +123,12 @@
 
 
 	// 获取缓存
-	const storgClassList = uni.getStorageSync("storgClassList")
+	const storgClassList = uni.getStorageSync("storageClassList")
 	// 复制数组，新增大图 url
 	classList.value = storgClassList.map(item => {
 		return {
 			...item,
-			picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!10p", "")
+			picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
 		}
 	})
 
@@ -141,7 +141,7 @@
 			classList.value = classList.value.map(item => {
 				return {
 					...item,
-					picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!10p", "")
+					picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
 				}
 			})
 		} else {

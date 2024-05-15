@@ -1,9 +1,9 @@
 <template>
 	<view class="page-login">
-		<view v-if="canIUse||canIGetUserProfile">
+		<view v-if="canIUse">
 			<view class='content'>
 				<!-- 获取用户头像 -->
-				<image mode="aspectFit" :src="avatarUrl" style="width: 140rpx;height: 140rpx;"></image>
+				<image mode="aspectFill" :src="avatarUrl" style="width: 140rpx;height: 140rpx;"></image>
 				<view class="name">登录</view>
 				<view>申请获取以下权限</view>
 				<text>获得你的公开信息(昵称、头像、地区等)</text>
@@ -15,7 +15,7 @@
 				<!--<button v-if="canIGetUserProfile" open-type="getPhoneNumber" class='login-btn' type='primary' @click="bindPhone"> 微信一键登录 </button>-->
 				<!--旧版登录方式-->
 				<button v-else class='login-btn' type='primary' open-type="getUserInfo" withCredentials="true"
-					lang="zh_CN" @getuserinfo="bindGetUserInfo"> 授权登录1 </button>
+					lang="zh_CN" @getuserinfo="bindGetUserInfo"> 授权登录 </button>
 
 			</view>
 		</view>
@@ -29,7 +29,7 @@
 	
 	const canIUse = ref(uni.canIUse('button.open-type.getUserInfo') || null)
 	const canIGetUserProfile = ref(true)
-	const avatarUrl = ref("../../static/images/xxmLogo.png")
+	const avatarUrl = ref("../../static/logo.png")
 	const isToken = ref(false)
 	const redirectUrl = ref(null)
 	

@@ -49,7 +49,7 @@
 
 	// 离开页面清除缓存
 	onUnload((e) => {
-		uni.removeStorageSync('storgClassList')
+		uni.removeStorageSync('storageClassList')
 	})
 
 	// 触底触发事件
@@ -72,7 +72,7 @@
 		if (queryParams.perPage > res.length) noData.value = true
 
 		classList.value = [...classList.value, ...res]
-		uni.setStorageSync("storgClassList", classList.value)
+		uni.setStorageSync("storageClassList", classList.value)
 		uni.stopPullDownRefresh()
 	}
 
