@@ -16,7 +16,7 @@
 		</view>
 
 		<!-- 底部安全区域 -->
-		<view class="safe-area-inset-bottom"></view>
+		<view class="safe-area-inset-bottom-custom"></view>
 	</view>
 </template>
 

@@ -11,7 +11,6 @@
 			</uni-search-bar>
 		</view>
 		
-		
 		<view v-if="!classList.length">
 			<view class="history" v-if="historySearch.length">
 				<view class="topTitle">

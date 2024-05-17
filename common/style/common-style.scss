@@ -17,6 +17,10 @@ view,swiper,swiper-item {
 	height: env(safe-area-inset-bottom);
 }
 
+.safe-area-inset-bottom-custom {
+	height: calc(100upx + env(safe-area-inset-bottom));
+}
+
 /*
   ColorUi for uniApp  v2.1.6 | by 文晓港 2019-05-31 10:44:24
   仅供学习交流，如作它用所承受的法律责任一概与作者无关

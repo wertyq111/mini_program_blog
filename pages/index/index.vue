@@ -5,7 +5,8 @@
 			<swiper indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff" autoplay
 				circular>
 				<swiper-item v-for="item in bannerList" :key="item.id">
-					<navigator v-if="item.target === 'miniProgram'" :url="item.url" class="link" target="miniProgram" :app-id="item.appid">
+					<navigator v-if="item.target === 'miniProgram'" :url="item.url" class="link" target="miniProgram"
+						:app-id="item.appid">
 						<image :src="item.picurl" mode="aspectFill" />
 					</navigator>
 					<navigator v-else :url="`/pages/classlist/classlist?${item.url}`" class="link">
@@ -17,7 +18,7 @@
 
 		<view class="notice">
 			<view class="left">
-				<uni-icons type="sound-filled" size="20" />
+				<uni-icons color="#28b389" type="sound-filled" size="20" />
 				<text class="text">公告</text>
 			</view>
 			<view class="center">
@@ -40,7 +41,7 @@
 				<template #abc><text class="text-ABC">RECOMMEND</text></template>
 				<template #custom>
 					<view class="date">
-						<uni-icons type="calendar" size="18" />
+						<uni-icons color="#28b389" :type="'calendar'" size="20" />
 						<view class="text">
 							<uni-dateformat :date="Date.now()" format="dd日"></uni-dateformat>
 						</view>
@@ -70,13 +71,22 @@
 				<theme-item :isMore="true"></theme-item>
 			</view>
 		</view>
+		<!-- 底部安全区域 -->
+		<view class="safe-area-inset-bottom-custom"></view>
 	</view>
 </template>
 
 <script setup>
-	import { ref } from 'vue';
-	import { requestApi } from '@/api/apis.js';
-	import { onShareAppMessage, onShareTimeline } from "@dcloudio/uni-app"
+	import {
+		ref
+	} from 'vue';
+	import {
+		requestApi
+	} from '@/api/apis.js';
+	import {
+		onShareAppMessage,
+		onShareTimeline
+	} from "@dcloudio/uni-app"
 
 	const bannerList = ref([]);
 	const noticeList = ref([]);
@@ -91,20 +101,20 @@
 			target: "self",
 			picurl: "https://cdn.chouy.xyz/wallpaper/banner/1712630556668676.jpg",
 			url: "id=6&name=创意色彩"
-		},{
+		}, {
 			id: 2,
 			sort: 2,
 			target: "self",
 			picurl: "https://cdn.chouy.xyz/wallpaper/banner/171263055687454.jpg",
 			url: "id=1&name=可爱萌宠"
-		},{
+		}, {
 			id: 3,
 			sort: 3,
 			target: "miniProgram",
 			picurl: "https://cdn.chouy.xyz/wallpaper/banner/1712630557083597.jpg",
 			url: "/pages/index/index",
 			appid: "wxbd89d0ba67f6b6a4"
-		},{
+		}, {
 			id: 4,
 			sort: 4,
 			target: "self",
@@ -115,8 +125,10 @@
 
 	// 获取 公告
 	const getNotice = async () => {
-		let notebookList = await requestApi("notebookList", {include: "member"});
-		if(notebookList) {
+		let notebookList = await requestApi("notebookList", {
+			include: "member"
+		});
+		if (notebookList) {
 			notebookList.forEach(item => {
 				noticeList.value.push({
 					author: item.member.nickname,
@@ -128,36 +140,6 @@
 				})
 			})
 		}
-
-		// noticeList.value = [{
-		// 	author: "咸虾米",
-		// 	publish_date: 1698041511788,
-		// 	select: true,
-		// 	title: "咸虾米壁纸，版权公告",
-		// 	view_count: 8657,
-		// 	id: "65360ea7bd0220d7635bd34b"
-		// },{
-		// 	author: "咸虾米",
-		// 	publish_date: 1698045489090,
-		// 	select: false,
-		// 	title: "关于我们，相关介绍",
-		// 	view_count: 854,
-		// 	id: "65361e318b0da4ca084e3ce0"
-		// },{
-		// 	author: "咸虾米",
-		// 	publish_date: 1698051468713,
-		// 	select: false,
-		// 	title: "常见问题，自行排查",
-		// 	view_count: 6690,
-		// 	id: "6536358ce0ec19c8d67fbe82"
-		// },{
-		// 	author: "咸虾米",
-		// 	publish_date: 1697974214505,
-		// 	select: true,
-		// 	title: "欢迎关注咸虾米圈子公众号，获取UP主咸虾米最新动态。",
-		// 	view_count: 19804,
-		// 	id: "653507c6466d417a3718e94b"
-		// }];
 	}
 
 	// 获取 随机 9 宫格图片
@@ -167,7 +149,9 @@
 
 	// 获取专题图片
 	const getClassify = async () => {
-		classifyList.value = await requestApi("classify", {"select": true});
+		classifyList.value = await requestApi("classify", {
+			"select": true
+		});
 	}
 
 
@@ -214,9 +198,11 @@
 					width: 100%;
 					height: 100%;
 					padding: 0 30rpx;
+
 					.link {
 						width: 100%;
 						height: 100%;
+
 						image {
 							width: 100%;
 							height: 100%;
@@ -241,15 +227,17 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				:deep() {
-					.uni-icons {
-						color: $brand-theme-color !important;
-					}
-				}
+
 				.text {
 					color: $brand-theme-color;
 					font-weight: 600;
 					font-size: 28rpx;
+				}
+
+				:deep() {
+					.uni-icons {
+						color: $brand-theme-color !important;
+					}
 				}
 			}
 
@@ -280,12 +268,12 @@
 
 		.select {
 			padding-top: 50rpx;
+
 			.date {
-				:deep() {
-					.uni-icons {
-						color: $brand-theme-color !important;
-					}
+				::v-deep .uni-icons {
+					color: $brand-theme-color !important;
 				}
+
 				color: $brand-theme-color;
 				display: flex;
 				align-items: center;
@@ -325,11 +313,13 @@
 
 		.theme {
 			padding-top: 50rpx 0;
+
 			.more {
 				margin-right: 20rpx;
 				font-size: 32rpx;
 				color: #888;
 			}
+
 			.content {
 				margin-top: 30rpx;
 				padding: 0 30rpx;

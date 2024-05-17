@@ -12,7 +12,7 @@ const API_LIST = {
 	userWallList: '/wallpaper/user-list', // 个人中心 - 我的评分/下载列表
 	memberInfo: '/members/user', // 个人中心
 	searchWall: '/bizhi/searchWall', //搜索壁纸
-	login: '/easywechat/mini_program/authorizations', //登录
+	login: '/easywechat/mini_program/authorizations', //授权登录
 	getUserInfo: '/users/getUserInfo', //获取用户信息
 	getQiniuToken: '/qiniu/up-token', //获取七牛云token
 	addWallPagerClassify: '/wallpaper-classify/add', //添加壁纸分类
@@ -21,6 +21,9 @@ const API_LIST = {
 	notebookList: '/articles/index', // 文章列表
 	notebookDetail: '/articles/show', // 文章列表
 	notebookGood: '/articles/good', // 文章点赞
+	captcha: '/captcha', // 获取验证码
+	normalLogin: '/user/login', // 用户登录
+	normalRegister: '/user/register' // 用户注册
 }
 
 export function requestApi(target, data = {}, config = {}, isSplic = false) {

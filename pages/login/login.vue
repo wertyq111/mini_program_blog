@@ -104,7 +104,7 @@
 		})
 		uni.setStorageSync('user', user)
 		if(uni.getStorageSync('user')) {
-			let url = "/pages/user/user"
+			let url = "/pages/tabtar/tabtar"
 			uni.reLaunch({url})
 		}
 	}

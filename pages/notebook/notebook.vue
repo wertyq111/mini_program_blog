@@ -62,10 +62,7 @@ const queryParams = {
     perPage: 12
 }
 
-// 加载完毕获取请求参数
-onLoad((e) => {
-    getNotebookList()
-})
+uni.setEnable
 
 // 触底触发事件
 onReachBottom(() => {
@@ -94,6 +91,10 @@ const goNews = (id) => {
         url: '/pages/notice/detail?id=' + id,
     })
 }
+
+getNotebookList()
+
+
 </script>
 
 <style lang="scss" scoped>

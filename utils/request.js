@@ -19,9 +19,9 @@ export function request(url, data = {}, config = {}) {
 
 	let route = curPage[curPage.length - 1].route; //获取当前页面的路由
 	// 如果没有登录自动跳转到登录页面
-	if(!uni.getStorageSync('user') && url != '/users/getUserInfo' && url !== '/easywechat/mini_program/authorizations') {
+	if(!uni.getStorageSync('user') && route.search('pages/login') === -1 && url !== '/easywechat/mini_program/authorizations') {
 		uni.navigateTo({
-			url: "/pages/login/login?url=" + route
+			url: "/pages/login/normal-login?url=" + route
 		})
 		return false
 	}

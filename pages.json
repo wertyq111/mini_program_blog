@@ -1,30 +1,46 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path" : "pages/classify/classify",
-			"style" :
+			"path" : "pages/tabtar/tabtar",
+			"style" : 
 			{
-				"navigationBarTitleText" : "分类",
-				"enablePullDownRefresh" : false,
+				"navigationBarTitleText": "子曰小窝",
 				"navigationStyle": "custom"
 			}
 		},
-		{
-			"path" : "pages/user/user",
-			"style" :
-			{
-				"navigationBarTitleText" : "我的",
-				"enablePullDownRefresh" : false,
-				"navigationStyle": "custom"
-			}
-		},
+		// {
+		// 	"path": "pages/index/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "推荐",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
+		// {
+		// 	"path" : "pages/classify/classify",
+		// 	"style" :
+		// 	{
+		// 		"navigationBarTitleText" : "分类",
+		// 		"enablePullDownRefresh" : false,
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
+		// {
+		// 	"path" : "pages/notebook/notebook",
+		// 	"style" :
+		// 	{
+		// 		"navigationBarTitleText" : " 文章资讯",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
+		// {
+		// 	"path" : "pages/user/user",
+		// 	"style" :
+		// 	{
+		// 		"navigationBarTitleText" : "我的",
+		// 		"enablePullDownRefresh" : false,
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 		{
 			"path" : "pages/classlist/classlist",
 			"style" :
@@ -76,50 +92,76 @@
 			}
 		},
 		{
-			"path" : "pages/notebook/notebook",
-			"style" :
+			"path" : "pages/login/normal-login",
+			"style" : 
 			{
-				"navigationBarTitleText" : " 文章资讯",
-				"navigationStyle": "custom"
+				"navigationBarTitleText" : "用户登录",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/login/register",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户注册",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/login/forget",
+			"style" : 
+			{
+				"navigationBarTitleText" : "忘记密码",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/login/mobile-login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "手机登录",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
 			}
 		}
 	],
+	// "tabBar": {
+	// 	"color": "#9799a5",
+	// 	"selectedColor": "#28B389",
+	// 	"list": [
+	// 		{
+	// 			"text": "推荐",
+	// 			"iconPath": "static/images/tabBar/home.png",
+	// 			"selectedIconPath": "static/images/tabBar/home-h.png",
+	// 			"pagePath": "pages/index/index"
+	// 		},
+	// 		{
+	// 			"text": "分类",
+	// 			"iconPath": "static/images/tabBar/classify.png",
+	// 			"selectedIconPath": "static/images/tabBar/classify-h.png",
+	// 			"pagePath": "pages/classify/classify"
+	// 		},
+	// 		{
+	// 			"text": "文章",
+	// 			"iconPath": "static/images/tabBar/notebook.png",
+	// 			"selectedIconPath": "static/images/tabBar/notebook-h.png",
+	// 			"pagePath": "pages/notebook/notebook"
+	// 		},
+	// 		{
+	// 			"text": "我的",
+	// 			"iconPath": "static/images/tabBar/user.png",
+	// 			"selectedIconPath": "static/images/tabBar/user-h.png",
+	// 			"pagePath": "pages/user/user"
+	// 		}
+	// 	]
+	// },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "咸虾米壁纸",
+		"navigationBarTitleText": "子曰小窝",
 		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#F8F8F8"
-	},
-	"tabBar": {
-		"color": "#9799a5",
-		"selectedColor": "#28B389",
-		"list": [
-			{
-				"text": "推荐",
-				"iconPath": "static/images/tabBar/home.png",
-				"selectedIconPath": "static/images/tabBar/home-h.png",
-				"pagePath": "pages/index/index"
-			},
-			{
-				"text": "分类",
-				"iconPath": "static/images/tabBar/classify.png",
-				"selectedIconPath": "static/images/tabBar/classify-h.png",
-				"pagePath": "pages/classify/classify"
-			},
-			{
-				"text": "文章",
-				"iconPath": "static/images/tabBar/notebook.png",
-				"selectedIconPath": "static/images/tabBar/notebook-h.png",
-				"pagePath": "pages/notebook/notebook"
-			},
-			{
-				"text": "我的",
-				"iconPath": "static/images/tabBar/user.png",
-				"selectedIconPath": "static/images/tabBar/user-h.png",
-				"pagePath": "pages/user/user"
-			}
-		]
-	},
-	"lazyCodeLoading": "requiredComponents",
-	"uniIdRouter": {}
+	}
 }

@@ -5,6 +5,8 @@
 			<theme-item v-for="item in classifyList" :key="item._id" :item="item" />
 		</view>
 	</view>
+	<!-- 底部安全区域 -->
+	<view class="safe-area-inset-bottom-custom"></view>
 </template>
 
 <script setup>
