@@ -30,7 +30,8 @@
 		<view class="padding margin-top-xs">
 			<button class="cu-btn block round bg-login-zl margin-tb-sm lg" @click="login">立即登录</button>
 			<view class="text-gray flex justify-between padding-lr-sm">
-				<navigator url="/pages/login/register"><text>注册账号</text></navigator>
+				<!-- <navigator url="/pages/login/register"><text>注册账号</text></navigator> -->
+				<text></text>
 				<navigator url="/pages/login/forget"><text>忘记密码</text></navigator>
 			</view>
 		</view>
@@ -167,6 +168,7 @@
 		z-index: 99;
 		mix-blend-mode: screen;
 		height: 100rpx;
+		margin-left: 5rpx
 	}
 	
 	.third-login {

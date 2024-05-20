@@ -23,7 +23,10 @@ const API_LIST = {
 	notebookGood: '/articles/good', // 文章点赞
 	captcha: '/captcha', // 获取验证码
 	normalLogin: '/user/login', // 用户登录
-	normalRegister: '/user/register' // 用户注册
+	normalRegister: '/user/register', // 用户注册
+	mobileCaptcha: '/verification-code/send', // 获取短信验证码
+	queryUsername: '/user/query-username', // 获取短信验证码
+	normalForget: '/user/forget' // 忘记密码
 }
 
 export function requestApi(target, data = {}, config = {}, isSplic = false) {

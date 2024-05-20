@@ -47,6 +47,7 @@
 		justify-content: center;
 	}
 	.arrow {
+		position: fixed;
 		width: 38px;
 		height: 38px;
 		left: 30rpx;

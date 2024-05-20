@@ -1,6 +1,7 @@
 <template>
 	<view class="contaier">
 		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo-2.png);'">
+			<go-to :is-back="true" />
 			<view class="text-bold text-xxxl">子曰小窝</view>
 			<view class="margin-top-xs">欢迎注册账号</view>
 			<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
@@ -20,15 +21,27 @@
 				</view>
 				<view class="cu-form-group">
 					<view class="title">确认密码</view>
-					<input placeholder="请输入密码" name="confirmPassword" :password="isShowPassword" v-model="confirmPassword"  @blur="checkPassword"/>
+					<input placeholder="请输入密码" name="confirmPassword" :password="isShowPassword"
+						v-model="confirmPassword" @blur="checkPassword" />
 					<uni-icons :type="isShowPassword === true ? 'eye' : 'eye-slash'" size="20"
 						@click="showPassword()"></uni-icons>
+				</view>
+				<view class="cu-form-group">
+					<view class="title">手机号</view>
+					<input placeholder="请输入手机号" name="phone" v-model="phone" @blur="getCaptcha"></input>
 				</view>
 				<view class="cu-form-group solid-bottom">
 					<view class="title">验证码</view>
 					<input placeholder="请输入验证码" name="captcha" v-model="captcha"></input>
 					<image :src="captchaImage" mode='scaleToFill' class='gif-wave'
 						style="width:200rpx;height:70rpx;margin-right:6rpx;" @click="refreshCaptcha"></image>
+				</view>
+				<view class="cu-form-group">
+					<view class="title">验证码</view>
+					<input placeholder="请输入短信验证码" name="mobileCaptcha" v-model="mobileCaptcha"></input>
+					<button class="cu-btn block round bg-login-zl margin-tb-sm lg getCode"
+						:disabled="!mobileButtonFlag ? true : false" style="width:37%"
+						@click="getMobileCaptcha">{{ mobileButtonText }}</button>
 				</view>
 			</form>
 		</view>
@@ -41,6 +54,9 @@
 
 <script setup>
 	import {
+		watch
+	} from 'vue';
+	import {
 		requestApi
 	} from '@/api/apis';
 
@@ -52,6 +68,11 @@
 	const username = ref("")
 	const password = ref("")
 	const confirmPassword = ref("")
+	const phone = ref("")
+	const mobileCaptcha = ref("")
+	const mobileCaptchaKey = ref("")
+	const mobileButtonText = ref("获取验证码")
+	const mobileButtonFlag = ref(true)
 
 	/* 加载完页面预处理 */
 	onLoad((e) => {
@@ -59,7 +80,6 @@
 			url
 		} = e
 		redirectUrl.value = url
-		refreshCaptcha()
 	})
 
 	/* 是否显示密码 */
@@ -69,49 +89,160 @@
 
 	/* 刷新验证码 */
 	const refreshCaptcha = async () => {
-		let res = await requestApi('captcha')
-		captchaImage.value = res.captcha_image_content
-		captchaKey.value = res.captcha_key
+		if (phone.value) {
+			let res = await requestApi('captcha', {
+				phone: phone.value
+			})
+			captchaImage.value = res.captcha_image_content
+			captchaKey.value = res.captcha_key
+		}
+	}
+
+	/* 确认密码一致 */
+	const checkPassword = () => {
+		if (!confirmPassword.value || !password.value || confirmPassword.value !== password.value) {
+			uni.showToast({
+				title: '两次密码不一致！',
+				icon: 'none'
+			});
+			return false
+		}
+
+		return true
 	}
 	
-	const checkPassword = () => {
-		if(!confirmPassword.value || !password.value || confirmPassword.value !== password.value) {
-			uni.showToast({ title: '两次密码不一致！', icon: 'none' });
+	/* 手机号验证 */
+	const checkMobile = () => {
+		// 验证手机号
+		if (!phone.value) { //判断如果手机号（this.tele）为空，提示用户输入手机号
+			uni.showToast({
+				title: '请输入手机号',
+				icon: 'none'
+			})
 			return false
 		}
 		
-		return true
+		let reg = /^1[3456789]\d{9}$/
+		if (!reg.test(phone.value)) { //判断手机号格式时候正确
+			uni.showToast({
+				title: '请输入正确的手机号',
+				icon: 'none'
+			})
+			return false
+		}
+	}
+	
+	/* 验证表单 */
+	const checkForm = () => {
+		// 验证必填字段
+		if(!username.value) {
+			uni.showToast({
+				title: '请输入用户名',
+				icon: 'none'
+			})
+			return false
+		}
+		
+		// 验证各个字段
+		if(checkPassword() == false || checkMobile() == false) {
+			return false;
+		}
+	}
+	
+	/* 获取图片验证码 */
+	const getCaptcha = () => {
+		if(checkMobile() != false) {
+			refreshCaptcha()
+			return 
+		} else {
+			return
+		}
+	}
+
+	/* 获取短信验证码 */
+	const getMobileCaptcha = async () => {
+		// 验证表单
+		if(checkForm() == false) {
+			return
+		}
+		
+		// 等待获取验证码
+		if (mobileButtonFlag.value == false) {
+			return
+		}
+
+		// 验证表单
+		let params = {
+			captcha: captcha.value,
+			captcha_key: captchaKey.value,
+			type: 'register'
+		}
+		await requestApi('mobileCaptcha', params, {
+			method: 'POST'
+		}).then(res => {
+			console.log(res);
+			if (res.key) {
+				uni.showToast({
+					title: '验证码发送成功！',
+					icon: 'none'
+				});
+				mobileCaptchaKey.value = res.key
+				
+				mobileButtonFlag.value = false;
+				let time = 60
+				mobileButtonText.value = '重新获取' + time + 's'
+				let timer = setInterval(() => {
+					mobileButtonText.value = '获取验证码'
+					if (time == 1) {
+						mobileButtonFlag.value = true;
+						clearInterval(timer)
+					} else {
+						time--
+						mobileButtonText.value = '重新获取' + time + 's'
+					}
+				
+				}, 1000)
+			}
+		}).finally(() => {
+			refreshCaptcha()
+		})
 	}
 
 	/* 注册 */
 	const register = async () => {
-		
+
 		// 验证两次密码是否一直
-		if(checkPassword() === false) {
-			return false
+		if (checkForm() === false) {
+			return
+		}
+		
+		// 验证手机短信验证码
+		if (!mobileCaptcha.value) {
+			uni.showToast({
+				title: '请输入短信验证码',
+				icon: 'none'
+			})
+			return 
 		}
 		
 		let params = {
 			username: username.value,
 			password: password.value,
-			captcha: captcha.value,
-			captcha_key: captchaKey.value
+			captcha: mobileCaptcha.value,
+			captcha_key: mobileCaptchaKey.value
 		}
-		console.log(params);
 
 		await requestApi("normalRegister", params, {
 			method: 'POST'
 		}).then(async res => {
-			console.log(res);
 			// 保存 token
 			uni.setStorageSync('token', `${res.token_type} ${res.access_token}`)
 			// 保存 token 过期时间
 			uni.setStorageSync('token_expired', res.expires_in)
-			
+
 			let user = await requestApi('getUserInfo', {
 				include: 'member'
 			})
-			console.log(user);
 			uni.setStorageSync('user', user)
 			if (uni.getStorageSync('user')) {
 				let url = "/pages/tabtar/tabtar"
@@ -119,7 +250,10 @@
 					url
 				})
 			}
-			uni.showToast({ title: '注册成功！', icon: 'none' });
+			uni.showToast({
+				title: '注册成功！',
+				icon: 'none'
+			});
 		}).catch(() => {
 			refreshCaptcha()
 		})
@@ -180,34 +314,6 @@
 		z-index: 99;
 		mix-blend-mode: screen;
 		height: 100rpx;
+		margin-left: 5rpx
 	}
-	
-	.third-login {
-		text-align: center;
-		margin: 50rpx 0 0 0;
-		color: #666;
-		
-		& text {
-			margin-left: 20rpx;
-			color: #aaaaaa;
-			font-size: 27rpx;
-		}
-	}
-	
-	.third-list {
-		text-align: center;
-		width: 250rpx;
-		margin: 80rpx auto 0;
-		
-		& image {
-			width: 50rpx;
-			height: 50rpx;
-		}
-	}
-	
-	.third-type {
-		float: left;
-		width: 50%;
-	}
-	
 </style>
