@@ -103,7 +103,6 @@
 		let user = await requestApi('getUserInfo', {
 			include: 'member'
 		})
-		console.log(user);
 		uni.setStorageSync('user', user)
 		if (uni.getStorageSync('user')) {
 			let url = "/pages/tabtar/tabtar"

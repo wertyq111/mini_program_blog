@@ -182,7 +182,6 @@
 		await requestApi('mobileCaptcha', params, {
 			method: 'POST'
 		}).then(res => {
-			console.log(res);
 			if (res.key) {
 				uni.showToast({
 					title: '验证码发送成功！',

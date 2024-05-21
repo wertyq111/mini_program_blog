@@ -39,7 +39,7 @@
 				<view class="cu-form-group">
 					<view class="title">验证码</view>
 					<input placeholder="请输入短信验证码" name="mobileCaptcha" v-model="mobileCaptcha"></input>
-					<button class="cu-btn block round bg-login-zl margin-tb-sm lg getCode"
+					<button class="cu-btn block round bg-login-zl margin-tb-sm lg"
 						:disabled="!mobileButtonFlag ? true : false" style="width:37%"
 						@click="getMobileCaptcha">{{ mobileButtonText }}</button>
 				</view>
@@ -180,7 +180,6 @@
 		await requestApi('mobileCaptcha', params, {
 			method: 'POST'
 		}).then(res => {
-			console.log(res);
 			if (res.key) {
 				uni.showToast({
 					title: '验证码发送成功！',
@@ -210,8 +209,7 @@
 
 	/* 注册 */
 	const register = async () => {
-
-		// 验证两次密码是否一直
+		// 表单验证
 		if (checkForm() === false) {
 			return
 		}
