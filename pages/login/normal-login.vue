@@ -85,31 +85,30 @@
 			captcha: captcha.value,
 			captcha_key: captchaKey.value
 		}
-		console.log(params);
 
-		let res = await requestApi("normalLogin", params, {
+		await requestApi("normalLogin", params, {
 			method: 'POST'
-		}).then(() => {
+		}).then(async res => {
 			uni.showToast({ title: '登录成功！', icon: 'none' });
+			// 保存 token
+			uni.setStorageSync('token', `${res.token_type} ${res.access_token}`)
+			// 保存 token 过期时间
+			uni.setStorageSync('token_expired', res.expires_in)
+			
+			let user = await requestApi('getUserInfo', {
+				include: 'member'
+			})
+			uni.setStorageSync('user', user)
+			
+			if (uni.getStorageSync('user')) {
+				let url = "/pages/tabtar/tabtar"
+				uni.reLaunch({
+					url
+				})
+			}
 		}).catch(() => {
 			refreshCaptcha()
 		})
-
-		// 保存 token
-		uni.setStorageSync('token', `${res.token_type} ${res.access_token}`)
-		// 保存 token 过期时间
-		uni.setStorageSync('token_expired', res.expires_in)
-
-		let user = await requestApi('getUserInfo', {
-			include: 'member'
-		})
-		uni.setStorageSync('user', user)
-		if (uni.getStorageSync('user')) {
-			let url = "/pages/tabtar/tabtar"
-			uni.reLaunch({
-				url
-			})
-		}
 	}
 </script>
 

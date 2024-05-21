@@ -126,6 +126,15 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh" : false
 			}
+		},
+		{
+			"path" : "pages/user/about",
+			"style" : 
+			{
+				"navigationBarTitleText" : "关于小程序",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
 		}
 	],
 	// "tabBar": {

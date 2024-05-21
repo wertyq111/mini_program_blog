@@ -56,7 +56,6 @@
 <script setup>
 	import { getNavBarHeight } from '@/utils/system.js'
 	import { requestApi } from '@/api/apis.js';
-	import UniIcons from "../../uni_modules/uni-icons/components/uni-icons/uni-icons.vue";
 
 	const token = ref(uni.getStorageSync('token') || null)
 	const userInfo = ref(null)
@@ -165,15 +164,15 @@
 					}
 				},
 				textConfig: {
-					left: '订阅更新'
+					left: '修改密码'
 				},
 				isUrl: true,
-				url: "/pages/notice/detail?name=订阅中心&id=653507c6466d417a3718e94b"
+				url: "/pages/login/forget"
 			},
 			"question": {
 				iconConfig: {
 					left: {
-						type: 'flag-filled',
+						type: 'info-filled',
 						size: 20,
 					},
 					right: {
@@ -182,10 +181,10 @@
 					}
 				},
 				textConfig: {
-					left: '常见问题'
+					left: '关于小程序'
 				},
 				isUrl: true,
-				url: "/pages/notice/detail?name=常见问题&id=6536358ce0ec19c8d67fbe82"
+				url: "/pages/user/about"
 			}
 		}]
 	}

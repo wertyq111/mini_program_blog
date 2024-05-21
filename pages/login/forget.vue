@@ -3,7 +3,7 @@
 		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo-2.png);'">
 			<go-to :is-back="true" />
 			<view class="text-bold text-xxxl">子曰小窝</view>
-			<view class="margin-top-xs">欢迎注册账号</view>
+			<view class="margin-top-xs">修改密码</view>
 			<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 		</view>
 
