@@ -17,8 +17,10 @@
 			default: false
 		}
 	})
+	
+	//const emits = defineEmits([ "doClose" ]);
 
-	// 返回上一页
+	/* 返回上一页或者跳转到制定地址 */
 	const goBack = () => {
 		if(props.url) {
 			uni.reLaunch({
@@ -28,6 +30,11 @@
 			uni.navigateBack()
 		}
 	}
+	
+	/* 调用父组件的关闭方法，用来处理返回跳转时当前页面正在执行的方法 */
+	// const doClose = () => {
+	// 	emit('doClose');
+	// }
 </script>
 
 <style lang="scss" scoped>

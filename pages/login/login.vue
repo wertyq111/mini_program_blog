@@ -29,7 +29,7 @@
 	
 	const canIUse = ref(uni.canIUse('button.open-type.getUserInfo') || null)
 	const canIGetUserProfile = ref(true)
-	const avatarUrl = ref("../../static/logo.png")
+	const avatarUrl = ref("https://cdn.chouy.xyz/static/logo.png")
 	const isToken = ref(false)
 	const redirectUrl = ref(null)
 	

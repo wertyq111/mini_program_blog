@@ -25,7 +25,7 @@
 		<view v-else class="userInfo">
 			<navigator url="/pages/login/login">
 				<view class="avatar">
-					<image src="../../static/images/xxmLogo.png" mode=""></image>
+					<image src="https://cdn.chouy.xyz/static/logo.png" mode=""></image>
 				</view>
 				<view class="ip">登录 / 注册</view>
 			</navigator>

@@ -26,12 +26,12 @@
 	/* 挂载处理 */
 	onMounted(() => {
 		ctx = uni.createCanvasContext(props.canvasId)
-		console.log(props.canvasId + "mounted");
+		console.log(props.canvasId + " mounted");
 	})
 	
 	/* 销毁处理 */
 	onUnmounted(() => {
-		console.log(props.canvasId + 'destoryed');
+		console.log(props.canvasId + ' destoryed');
 		clearTimer()
 	})
 
@@ -162,12 +162,12 @@
 				bubbleAnimate();
 			}, 5);
 		} else {
-			console.log("aaa");
 			clearTimer()
 			ctx.draw(); // 清空画面
 		}
 	}
 
+    /* 清除定时器 */
 	const clearTimer = () => {
 		if (timer) {
 			clearTimeout(timer)

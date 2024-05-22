@@ -139,7 +139,7 @@
 		border-radius: 12upx;
 		width: 45%;
 		margin: 0 2.5% 40upx;
-		background-image: url("@/static/images/pages/NyU04x.png");
+		background-image: url("https://cdn.chouy.xyz/static/NyU04x.png");
 		background-size: cover;
 		background-position: center;
 		position: relative;
@@ -288,7 +288,7 @@
 		justify-content: center;
 		/* padding: 40rpx 0 0 0; */
 		font-weight: bold;
-		background-image: url("@/static/images/pages/wccswF.png");
+		background-image: url("https://cdn.chouy.xyz/static/wccswF.png");
 		background-size: cover;
 	}
 

@@ -29,7 +29,7 @@
 		</view>
 
 		<button class='' open-type="contact">
-			<image src='../../static/logo.png' class='share-img png round shadow-lg bg-white' mode='aspectFit'>
+			<image src='https://cdn.chouy.xyz/static/logo.png' class='share-img png round shadow-lg bg-white' mode='aspectFit'>
 			</image>
 		</button>
 	</view>
@@ -39,6 +39,7 @@
 	import {
 		onShareAppMessage
 	} from "@dcloudio/uni-app"
+import { onUnmounted } from "vue";
 
 	const animationTimer = ref(null)
 	const width = ref(375)
@@ -48,6 +49,11 @@
 	onLoad(() => {
 		startBubbleAnimation()
 	})
+	
+	onUnmounted(() => {
+		console.log('about destoryed');
+		clearTimer()
+	})
 
 	onShareAppMessage((e) => {
 		return {
@@ -56,11 +62,19 @@
 		}
 	})
 
+    /* 启动冒泡动画 */
 	const startBubbleAnimation = () => {
 		animationTimer.value = setInterval(() => {
 			refchild.value.likeClick()
 		}, 300)
 
+	}
+	
+	/* 清除定时器 */
+	const clearTimer = () => {
+		if (animationTimer.value) {
+			clearTimeout(animationTimer.value)
+		}
 	}
 </script>
 

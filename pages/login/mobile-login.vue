@@ -1,5 +1,5 @@
 <template>
-	<view class="contaier">
+	<view class="contaier login">
 		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo-2.png);'">
 			<go-to :is-back="true" />
 			<view class="text-bold text-xxxl">子曰小窝</view>
@@ -8,29 +8,40 @@
 		</view>
 
 		<view class="input-box padding-lr">
-			<form>
-				<view class="cu-form-group margin-top">
-					<view class="title">手机号</view>
-					<input placeholder="请输入手机号" name="phone" v-model="phone" @blur="getCaptcha"></input>
+			<up-form :model="form" :rules="rules" ref="uFormRef" style="width: 100%;">
+				<view class="cu-form-group margin-top solid-bottom">
+					<up-form-item labelWidth="50" style="width: 100%;" label="手机号" prop="username">
+						<up-input v-model="form.username" placeholder="请输入手机号" border="none"
+							@blur="getCaptcha"></up-input>
+					</up-form-item>
 				</view>
 				<view class="cu-form-group solid-bottom">
-					<view class="title">验证码</view>
-					<input placeholder="请输入验证码" name="captcha" v-model="captcha"></input>
+					<up-form-item labelWidth="60" label="验证码" prop="captchaImage">
+						<up-input v-model="captcha" placeholder="请输入验证码" border="none" />
+					</up-form-item>
 					<image :src="captchaImage" mode='scaleToFill' class='gif-wave'
 						style="width:200rpx;height:70rpx;margin-right:6rpx;" @click="refreshCaptcha"></image>
 				</view>
 				<view class="cu-form-group">
-					<view class="title">验证码</view>
-					<input placeholder="请输入短信验证码" name="mobileCaptcha" v-model="mobileCaptcha"></input>
-					<button class="cu-btn block round bg-login-zl margin-tb-sm lg"
-						:disabled="!mobileButtonFlag ? true : false" style="width:37%"
-						@click="getMobileCaptcha">{{ mobileButtonText }}</button>
+					<up-form-item labelWidth="60" label="验证码" prop="captcha">
+						<!-- <up-input v-model="form.captcha" placeholder="请输入短信验证码" border="none" @focus="showNumberKeyword = true" /> -->
+						<up-code-input v-model="form.captcha" :maxlength="4" mode="line" :disabled-keyboard="true"
+							@finish="showNumberKeyword = false" @tap="showNumberKeyword = true"></up-code-input>
+					</up-form-item>
+					<up-code :seconds="60" change-text="XS重新获取" @start="buttonDisabled = true"
+						@end="buttonDisabled = false" ref="uCodeRef" @change="codeChange"></up-code>
+					<up-button :custom-style="codeStyle" color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle"
+						@tap="getMobileCaptcha" :disabled="buttonDisabled">{{tips}}</up-button>
+					<up-keyboard mode="number" @change="codeInput" @backspace="backspace" :show="showNumberKeyword"
+						:showConfirm="false" :showCancel="false" tips="请输入验证码" :dotDisabled="true"
+						@close="showNumberKeyword = false">
+					</up-keyboard>
 				</view>
-			</form>
+			</up-form>
 		</view>
 
 		<view class="padding margin-top-xs">
-			<button class="cu-btn block round bg-login-zl margin-tb-sm lg" @click="login">立即登录</button>
+			<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="login">立即登录</up-button>
 		</view>
 	</view>
 </template>
@@ -40,18 +51,62 @@
 		requestApi
 	} from '@/api/apis';
 
+	/* 响应式表单数据 */
+	const form = ref({
+		username: "",
+		captcha: "",
+		captcha_key: ""
+	});
+
+	/* 验证码按钮样式 */
+	const codeStyle = reactive({
+		marginLeft: '20rpx',
+		width: '40%'
+	});
+
+	/* 校验规则 */
+	const rules = {
+		username: [{
+			validator: (rule, value, callback) => {
+				// 上面有说，返回true表示校验通过，返回false表示不通过
+				// uni.$u.test.mobile()就是返回true或者false的
+				return uni.$u.test.mobile(value);
+			},
+			message: '手机号码不正确',
+			// 触发器可以同时用blur和change
+			trigger: ['change', 'blur'],
+		}],
+		captcha: [{
+				required: true,
+				message: "请输入短信验证码",
+				trigger: ["blur", "change"]
+			},
+			{
+				pattern: /^[0-9]*$/g,
+				// 正则检验前先将值转为字符串
+				transform(value) {
+					return String(value);
+				},
+				message: '只能包含数字'
+			}
+		]
+	}
+
+	// 表单引用  
+	const uFormRef = ref(null);
 	const captcha = ref("")
 	const captchaImage = ref("")
 	const captchaKey = ref("")
 	const redirectUrl = ref(null)
 	const isShowPassword = ref(true)
-	const username = ref("")
-	const password = ref("")
-	const phone = ref("")
-	const mobileCaptcha = ref("")
-	const mobileCaptchaKey = ref("")
-	const mobileButtonText = ref("获取验证码")
-	const mobileButtonFlag = ref(true)
+	const buttonDisabled = ref(false)
+	const uCodeRef = ref(null);
+	const tips = ref('');
+	const showNumberKeyword = ref(false);
+
+	const codeChange = (text) => {
+		tips.value = text;
+	};
 
 	/* 加载完页面预处理 */
 	onLoad((e) => {
@@ -68,124 +123,85 @@
 
 	/* 刷新验证码 */
 	const refreshCaptcha = async () => {
-		if (phone.value) {
+		if (form.value.username) {
 			let res = await requestApi('captcha', {
-				phone: phone.value
+				phone: form.value.username
 			})
 			captchaImage.value = res.captcha_image_content
 			captchaKey.value = res.captcha_key
 		}
 	}
-	
-	/* 手机号验证 */
-	const checkMobile = () => {		
-		// 验证手机号
-		if (!phone.value) { //判断如果手机号（this.tele）为空，提示用户输入手机号
-			uni.showToast({
-				title: '请输入手机号',
-				icon: 'none'
-			})
-			return false
-		}
-		
-		let reg = /^1[3456789]\d{9}$/
-		if (!reg.test(phone.value)) { //判断手机号格式时候正确
-			uni.showToast({
-				title: '请输入正确的手机号',
-				icon: 'none'
-			})
-			return false
-		}
-	}
-	
+
 	/* 获取图片验证码 */
 	const getCaptcha = () => {
-		if(checkMobile() != false) {
+		if (form.value.username) {
 			refreshCaptcha()
-			return 
+			return
 		} else {
 			return
 		}
 	}
-	
+
 	/* 获取短信验证码 */
 	const getMobileCaptcha = async () => {
-		// 验证表单
-		if(checkForm() == false) {
-			return
-		}
-		
-		// 等待获取验证码
-		if (mobileButtonFlag.value == false) {
-			return
-		}
-	
-		// 验证表单
-		let params = {
-			captcha: captcha.value,
-			captcha_key: captchaKey.value
-		}
-		await requestApi('mobileCaptcha', params, {
-			method: 'POST'
-		}).then(res => {
-			if (res.key) {
-				uni.showToast({
-					title: '验证码发送成功！',
-					icon: 'none'
-				});
-				mobileCaptchaKey.value = res.key
-				
-				mobileButtonFlag.value = false;
-				let time = 60
-				mobileButtonText.value = '重新获取' + time + 's'
-				let timer = setInterval(() => {
-					mobileButtonText.value = '获取验证码'
-					if (time == 1) {
-						mobileButtonFlag.value = true;
-						clearInterval(timer)
-					} else {
-						time--
-						mobileButtonText.value = '重新获取' + time + 's'
-					}
-				
-				}, 1000)
+		if (uCodeRef.value.canGetCode && form.value.username) {
+			// 模拟向后端请求验证码
+			uni.showLoading({
+				title: '正在获取验证码',
+			});
+
+			// 验证表单
+			let params = {
+				captcha: captcha.value,
+				captcha_key: captchaKey.value
 			}
-		}).finally(() => {
-			refreshCaptcha()
-		})
-	}
-	
-	/* 验证表单 */
-	const checkForm = () => {
-		// 验证各个字段
-		if(checkMobile() == false) {
-			return false;
+
+			await requestApi('mobileCaptcha', params, {
+				method: 'POST'
+			}).then(res => {
+				if (res.key) {
+					uni.hideLoading();
+					// 这里此提示会被start()方法中的提示覆盖
+					uni.$u.toast('验证码已发送');
+					// 通知验证码组件内部开始倒计时
+					uCodeRef.value.start();
+					form.value.captcha_key = res.key
+				}
+			}).finally(() => {
+				refreshCaptcha()
+			})
 		}
+	}
+
+	/* 验证码输入 */
+	const codeInput = (val) => {
+		// 将每次按键的值拼接到value变量中，注意+=写法
+		form.value.captcha += val;
+		if (form.value.captcha.length >= 4) {
+			finish();
+		}
+	};
+
+	/* 验证码退格 */
+	const backspace = () => {
+		// 删除value的最后一个字符
+		if (form.value.captcha.length) {
+			form.value.captcha = form.value.captcha.substr(0, form.value.captcha.length - 1);
+		}
+	};
+
+
+
+	/* 验证码输入完毕 */
+	const finish = () => {
+		showNumberKeyword.value = false
 	}
 
 	/* 登录 */
 	const login = async () => {
-		// 表单验证
-		if (checkForm() === false) {
-			return
-		}
-		
-		// 验证手机短信验证码
-		if (!mobileCaptcha.value) {
-			uni.showToast({
-				title: '请输入短信验证码',
-				icon: 'none'
-			})
-			return 
-		}
-		
-		let params = {
-			username: phone.value,
-			captcha: mobileCaptcha.value,
-			captcha_key: mobileCaptchaKey.value,
+		let params = Object.assign({}, form.value, {
 			type: 'phone'
-		}
-		console.log(params);
+		})
 
 		await requestApi("normalLogin", params, {
 			method: 'POST'
@@ -194,7 +210,7 @@
 			uni.setStorageSync('token', `${res.token_type} ${res.access_token}`)
 			// 保存 token 过期时间
 			uni.setStorageSync('token_expired', res.expires_in)
-			
+
 			let user = await requestApi('getUserInfo', {
 				include: 'member'
 			})
@@ -205,7 +221,10 @@
 					url
 				})
 			}
-			uni.showToast({ title: '登录成功！', icon: 'none' });
+			uni.showToast({
+				title: '登录成功！',
+				icon: 'none'
+			});
 		}).catch(() => {
 			refreshCaptcha()
 		})
@@ -217,55 +236,4 @@
 		height: 100vh;
 		background-color: #ffffff;
 	}
-
-	.top-bg {
-		width: 750rpx;
-		height: 480rpx;
-		background-size: 100%;
-		background-repeat: no-repeat;
-		text-align: center;
-		padding-top: 170rpx;
-	}
-
-	.bg-login-zl {
-		background-image: linear-gradient(45deg, #28b389, #beecd8);
-		color: #ffffff;
-	}
-
-	.top-center-bg {
-		background: #fff;
-		background-size: 100% 100%;
-		/* background-size: cover; */
-		height: 550rpx;
-		display: flex;
-		justify-content: center;
-		padding-top: 40rpx;
-		overflow: hidden;
-		position: relative;
-		flex-direction: column;
-		align-items: center;
-		//color: #fff;
-		font-weight: 300;
-		text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-	}
-
-	.top-center-bg text {
-		opacity: 0.8;
-	}
-
-	.top-center-bg image {
-		width: 200rpx;
-		height: 200rpx;
-	}
-
-	.top-center-bg .gif-wave {
-		position: absolute;
-		width: 100%;
-		bottom: 0;
-		left: 0;
-		z-index: 99;
-		mix-blend-mode: screen;
-		height: 100rpx;
-		margin-left: 5rpx
-	}	
 </style>
