@@ -3,7 +3,7 @@
 		<view class="navbar">
 			<view class="statusBar" :style="{height: getStatusBarHeight() + 'px'}"></view>
 			<view class="titleBar" :style="{height: getTitleBarHeight() + 'px'}">
-				<go-to v-if="isBack" :is-back="true"/>
+				<go-to v-if="isBack" :is-back="true" :backClass="backClass" />
 				<view class="title">{{title}}</view>
 				<view class="search" v-if="!isBack">
 					<navigator url="/pages/search/search">
@@ -32,6 +32,10 @@
 		isBack: {
 			type: Boolean,
 			default: false
+		},
+		backClass: {
+			type: String,
+			default: "preview"
 		}
 	})
 </script>

@@ -108,13 +108,6 @@
 			picurl: "https://cdn.chouy.xyz/wallpaper/banner/171263055687454.jpg",
 			url: "id=1&name=可爱萌宠"
 		}, {
-			id: 3,
-			sort: 3,
-			target: "miniProgram",
-			picurl: "https://cdn.chouy.xyz/wallpaper/banner/1712630557083597.jpg",
-			url: "/pages/index/index",
-			appid: "wxbd89d0ba67f6b6a4"
-		}, {
 			id: 4,
 			sort: 4,
 			target: "self",
@@ -122,6 +115,15 @@
 			url: "id=2&name=AI美图"
 		}];
 	}
+	// 跳转到小程序
+	// {
+	// 	id: 3,
+	// 	sort: 3,
+	// 	target: "miniProgram",
+	// 	picurl: "https://cdn.chouy.xyz/wallpaper/banner/1712630557083597.jpg",
+	// 	url: "/pages/index/index",
+	// 	appid: "wxbd89d0ba67f6b6a4"
+	// }
 
 	// 获取 公告
 	const getNotice = async () => {

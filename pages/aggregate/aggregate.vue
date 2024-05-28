@@ -57,11 +57,6 @@
 	
 	const tools = ref([
 		{
-			title: 'photo',
-			name: '照片墙',
-			color: ''
-		},
-		{
 			title: 'wallpaper',
 			name: '壁纸管理',
 			color: ''
@@ -69,6 +64,11 @@
 		{
 			title: 'notebook',
 			name: '文章管理',
+			color: ''
+		},
+		{
+			title: 'photo',
+			name: '照片墙',
 			color: ''
 		},
 		{
@@ -82,8 +82,8 @@
 			color: ''
 		},
 		{
-			title: 'camera',
-			name: '相机',
+			title: 'map',
+			name: '地图',
 			color: ''
 		}
 	])

@@ -1,5 +1,5 @@
 <template>
-	<custom-nav-bar title="文章内容" :isBack="true"/>
+	<custom-nav-bar :title="detail.title" :isBack="true" backClass="detail" />
 	<view class="noticeLayout pageBg">
 		<view class="title">
 			<view class="tag">

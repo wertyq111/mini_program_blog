@@ -1,11 +1,12 @@
 <template>
-	<view :class="isBack ? 'arrow' : 'goBack'" :style="{top: getStatusBarHeight() + 'px'}" @click="goBack()">
+	<view class="goBack"  :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})" @click="goBack()">
 		<uni-icons type="back" :color="isBack ? '#333' : '#fff'" size="20" />
 	</view>
 </template>
 
 <script setup>
-	import { getStatusBarHeight } from '@/utils/system.js';
+	import { onMounted } from 'vue';
+import { getStatusBarHeight } from '@/utils/system.js';
 
 	const props = defineProps({
 		url: {
@@ -15,10 +16,32 @@
 		isBack: {
 			type: Boolean,
 			default: false
+		},
+		backClass: {
+			type: String,
+			default: "preview"
 		}
 	})
 	
+	onMounted(() => {
+		console.log(props.backClass);
+	})
+	
 	//const emits = defineEmits([ "doClose" ]);
+	
+	const customStyle = ref({
+		'preview': {
+			position: "absolute",
+			background: "rgba(0, 0, 0, 0.5)"
+		},
+		'detail': {
+			border: "1rpx"
+		},
+		'login': {
+			position: "absolute",
+			border: "1rpx"
+		}
+	})
 
 	/* 返回上一页或者跳转到制定地址 */
 	const goBack = () => {
@@ -38,11 +61,10 @@
 </script>
 
 <style lang="scss" scoped>
+	/* 返回图标基本样式 */
 	.goBack {
-		position:absolute;
 		width: 38px;
 		height: 38px;
-		background: rgba(0, 0, 0, 0.5);
 		left: 30rpx;
 		margin-left: 0;
 		border-radius: 100px;
@@ -53,18 +75,5 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.arrow {
-		position: fixed;
-		width: 38px;
-		height: 38px;
-		left: 30rpx;
-		margin-left: 0;
-		border-radius: 100px;
-		top: 0;
-		backdrop-filter: blur(10rpx);
-		border: 1rpx solid rgba(255, 255, 255, 0);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+	
 </style>

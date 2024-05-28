@@ -101,14 +101,14 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		{
-			"path": "pages/login/register",
-			"style": {
-				"navigationBarTitleText": "用户注册",
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false
-			}
-		},
+		// {
+		// 	"path": "pages/login/register",
+		// 	"style": {
+		// 		"navigationBarTitleText": "用户注册",
+		// 		"navigationStyle": "custom",
+		// 		"enablePullDownRefresh": false
+		// 	}
+		// },
 		{
 			"path": "pages/login/forget",
 			"style": {
