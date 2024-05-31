@@ -1,12 +1,12 @@
 <template>
 	<view class="components-home">
-		<view style="margin-top:-50rpx;height: 486rpx; position: relative;margin-bottom: 80rpx;">
-			<image src='https://zhoukaiwen.com/img/wccQQP.png' mode='widthFix' class='png'
-				style='width:100%;height:486rpx'></image>
-			<!--  -->
+		<view class="login">
+			<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
+				<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+			</view>
 		</view>
 
-		<swiper class="card-swiper round-dot" previous-margin="1rpx" :indicator-dots="false" :circular="true"
+<!-- 		<swiper class="card-swiper round-dot" previous-margin="1rpx" :indicator-dots="false" :circular="true"
 			:autoplay="true" interval="5000" duration="500" @change="cardSwiper" indicator-color="#ffffff"
 			indicator-active-color="#ffffff" style="margin-top: -320rpx;">
 			<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur == index ? 'cur':''">
@@ -14,7 +14,7 @@
 					<image :src="item.url" v-if="item.type=='image'" mode="aspectFill" class=""></image>
 				</view>
 			</swiper-item>
-		</swiper>
+		</swiper> -->
 
 		<view class="title-header">
 			<view class="title-text">
@@ -23,7 +23,7 @@
 		</view>
 
 		<view class='nav-list margin-top'>
-			<navigator open-type="navigate" hover-class='none' :url="'/tn_components/' + item.title"
+			<navigator open-type="navigate" hover-class='none' :url="'/pages/' + item.title"
 				:class="'nav-li bg-kuxuan' + (index+1)" v-for="(item, index) in tools" :key="index">
 				<view class="nav-name">{{item.name}}</view>
 			</navigator>
@@ -54,39 +54,12 @@
 	}])
 
 	const cardCur = ref(0)
-	
-	const tools = ref([
-		{
-			title: 'wallpaper',
-			name: '壁纸管理',
-			color: ''
-		},
-		{
-			title: 'notebook',
-			name: '文章管理',
-			color: ''
-		},
-		{
-			title: 'photo',
-			name: '照片墙',
-			color: ''
-		},
-		{
-			title: 'ticket',
-			name: '订单详情',
-			color: ''
-		},
-		{
-			title: 'chat',
-			name: '聊天功能',
-			color: ''
-		},
-		{
-			title: 'map',
-			name: '地图',
-			color: ''
-		}
-	])
+
+	const tools = ref([{
+		title: 'photos/photos',
+		name: '照片墙',
+		color: ''
+	}])
 
 	const cardSwiper = e => {
 		cardCur.value = e.detail.current

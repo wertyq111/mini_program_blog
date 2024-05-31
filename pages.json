@@ -90,7 +90,8 @@
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "用户登录",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -131,6 +132,14 @@
 				"navigationBarTitleText": "关于小程序",
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/photos/photos",
+			"style" : 
+			{
+				"navigationBarTitleText" : "相册",
+				"navigationStyle": "custom"
 			}
 		}
 	],

@@ -26,12 +26,10 @@
 	/* 挂载处理 */
 	onMounted(() => {
 		ctx = uni.createCanvasContext(props.canvasId)
-		console.log(props.canvasId + " mounted");
 	})
 	
 	/* 销毁处理 */
 	onUnmounted(() => {
-		console.log(props.canvasId + ' destoryed');
 		clearTimer()
 	})
 
@@ -58,7 +56,6 @@
 			bubbleAnimate();
 		}
 		
-		//console.log(image, queue);
 	}
 
 	/* 获取最大最小随机值 */

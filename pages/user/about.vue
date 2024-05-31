@@ -51,7 +51,6 @@ import { onUnmounted } from "vue";
 	})
 	
 	onUnmounted(() => {
-		console.log('about destoryed');
 		clearTimer()
 	})
 

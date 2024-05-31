@@ -1,6 +1,6 @@
 <template>
 	<view class="contaier login">
-		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo-2.png);'">
+		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
 			<view class="text-bold text-xxxl">子曰小窝</view>
 			<view class="margin-top-xs">欢迎使用，请先登录</view>
 			<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
@@ -32,8 +32,7 @@
 		</view>
 
 		<view class="padding margin-top-xs">
-			<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle"
-				:disabled="buttonDisabled" @click="login">立即登录</up-button>
+			<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="login">立即登录</up-button>
 			<view class="text-gray flex justify-between padding-lr-sm">
 				<!-- <navigator url="/pages/login/register"><text>注册账号</text></navigator> -->
 				<text></text>

@@ -67,8 +67,6 @@
 	const duration = ref(1)
 
 	const navChange = e => {
-		console.log(e.currentTarget.dataset.cur)
-
 		pageCur.value = e.currentTarget.dataset.cur;
 	}
 </script>

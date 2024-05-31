@@ -23,10 +23,6 @@ import { getStatusBarHeight } from '@/utils/system.js';
 		}
 	})
 	
-	onMounted(() => {
-		console.log(props.backClass);
-	})
-	
 	//const emits = defineEmits([ "doClose" ]);
 	
 	const customStyle = ref({

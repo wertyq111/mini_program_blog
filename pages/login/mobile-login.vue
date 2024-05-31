@@ -1,6 +1,6 @@
 <template>
 	<view class="contaier login">
-		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo-2.png);'">
+		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
 			<go-to :is-back="true" backClass="login" />
 			<view class="text-bold text-xxxl">子曰小窝</view>
 			<view class="margin-top-xs">欢迎使用，请先登录</view>
