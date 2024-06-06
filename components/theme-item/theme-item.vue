@@ -3,7 +3,7 @@
 		<navigator :url="'/pages/classlist/classlist?id=' + item.id + '&name=' + item.name" class="box" v-if="!isMore && item">
 			<image lazy-load class="pic" :src="item.picUrl" mode="aspectFill"></image>
 			<view class="mask">{{item.name}}</view>
-			<view class="tab">{{compareTimestamp(item.updateTime)}}前更新</view>
+			<view class="tab">{{compareTimestamp(item.updateTimestamp)}}前更新</view>
 		</navigator>
 		<navigator open-type="reLaunch" url="/pages/classify/classify" class="box more" v-if="isMore">
 			<image class="pic" src="../../common/image/more.jpg" mode="aspectFill"></image>

@@ -139,6 +139,32 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "相册",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/photos/timeLine",
+			"style" : 
+			{
+				"navigationBarTitleText" : "相册进程",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/photos/photosList",
+			"style" : 
+			{
+				"navigationBarTitleText" : "照片集",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/photos/preview",
+			"style" : 
+			{
+				"navigationBarTitleText" : "预览照片",
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 		}

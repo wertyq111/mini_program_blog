@@ -1,9 +1,14 @@
 <template>
 	<view class="contaier">
 		<view class="text-xxl" style="height: 770rpx; position: relative;">
-			<image src='https://cdn.chouy.xyz/login/logo.png' mode='widthFix' class='png'
-				style='width:100%;height:486rpx'></image>
-			<go-to :is-back="true" backClass="login" />
+			<view class="login">
+				<view class="top-bg top-center-bg"
+					:style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
+					<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+				</view>
+				<go-to :is-back="true" backClass="login" />
+			</view>
+
 
 			<view style="width: 100% ;position: absolute; top: 150rpx;">
 				<view class="titleImg margin-tb-xs">
@@ -14,20 +19,25 @@
 					</view>
 				</view>
 
-				<view style="position: relative; background-image: url(https://cdn.chouy.xyz/static/wccswF.png);">
-					<swiper class="card-swiper" :current='cardCur' :circular="true" vertical="true" :autoplay="false"
-						duration="500" interval="5000" @change="cardSwiper">
+				<view v-if="swiperList"
+					style="position: relative; background-image: url(https://cdn.chouy.xyz/static/wccswF.png); z-index:999">
+					<swiper v-if="swiperList.length" class="card-swiper" :current='cardCur' :circular="true"
+						vertical="true" :autoplay="false" duration="500" interval="5000" @change="cardSwiper">
 						<swiper-item v-for="(item,index) in swiperList" :key="index"
 							:class="cardCur == index ? 'cur' : ''" @click="previewImg(item.url)">
 							<view class="swiper-item image-banner">
-								<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
+								<up-image :src="item.url">
+									<template #error>
+										<view style="font-size: 24rpx;">加载失败</view>
+									</template>
+								</up-image>
 							</view>
 						</swiper-item>
 					</swiper>
-					<view class="indication">
+					<view class="indication" v-if="swiperList && swiperList.length">
 						<block v-for="(item,index) in swiperList" :key="index">
 							<view @click="clickItem(index)" class="spot" :class="cardCur == index ? 'active': '' ">
-								{{item.text}}
+								{{item.remark ? item.remark : item.category ? item.category.name : "" }}
 							</view>
 						</block>
 					</view>
@@ -35,122 +45,139 @@
 			</view>
 		</view>
 
-		<view class="cu-bar bg-white margin-top-xs solid-bottom">
-			<common-title>
-				<template #name><text class="text-xl text-bold text-shadow">最新照片</text></template>
-				<template #abc><text class="text-ABC">NEWPHOTOS</text></template>
-			</common-title>
-		</view>
-		<view class="cu-list menu-avatar">
-			<view class="cu-item" @click="goTimeLine">
-				<view class="cu-avatar radius lg" style="background-image:url(https://cdn.zhoukaiwen.com/aoshan.jpg);">
-				</view>
-				<view class="content">
-					<view class="text-shadow text-black text-bold">鳌山滑雪场</view>
-					<view class="text-gray text-sm flex">
-						<text>更新3313张照片</text>
-					</view>
-				</view>
-				<view class="action">
-					<view class="text-grey text-xs">1天前</view>
-				</view>
-			</view>
 
-			<view class="cu-item" @click="goTimeLine">
-				<view class="cu-avatar radius lg" style="background-image:url(https://cdn.zhoukaiwen.com/fulong.png);">
+		<common-title>
+			<template #name><text class="text-xl text-bold text-shadow">相册集</text></template>
+			<template #abc><text class="text-ABC">ALBUMS</text></template>
+			<template #custom>
+				<view class="plus" @click="isAddAlbum = true"><up-icon name="plus" /> 创建相册</view>
+			</template>
+		</common-title>
+		<view v-if="albumList && albumList.length" class="cu-list menu-avatar">
+			<view v-for="item in albumList" :key="item.id" class="cu-item" @click="goTimeLine(item.id)">
+				<view class="cu-avatar radius lg"
+					:style="'background-image:url(' + (item.photo ? item.photo.url : '') + ');'">
 				</view>
 				<view class="content">
-					<view class="text-shadow text-black text-bold">富龙滑雪场</view>
+					<view class="text-shadow text-black text-bold">{{item.name}}</view>
 					<view class="text-gray text-sm flex">
-						<text>更新1832张照片</text>
+						<text>共{{item.photos.length}}张照片</text>
 					</view>
 				</view>
 				<view class="action">
-					<view class="text-grey text-xs">3天前</view>
-				</view>
-			</view>
-
-			<view class="cu-item" @click="goTimeLine">
-				<view class="cu-avatar radius lg" style="background-image:url(https://cdn.zhoukaiwen.com/aoshan.jpg);">
-				</view>
-				<view class="content">
-					<view class="text-shadow text-black text-bold">可可托海滑雪场</view>
-					<view class="text-gray text-sm flex">
-						<text>更新823张照片</text>
-					</view>
-				</view>
-				<view class="action">
-					<view class="text-grey text-xs">1周前</view>
-				</view>
-			</view>
-
-			<view class="cu-item" @click="goTimeLine">
-				<view class="cu-avatar radius lg" style="background-image:url(https://cdn.zhoukaiwen.com/fulong.png);">
-				</view>
-				<view class="content">
-					<view class="text-shadow text-black text-bold">将军山滑雪场</view>
-					<view class="text-gray text-sm flex">
-						<text>更新3313张照片</text>
-					</view>
-				</view>
-				<view class="action">
-					<view class="text-grey text-xs">1个月前</view>
+					<view class="text-grey text-xs">{{compareTimestamp(item.updateTimestamp)}}前</view>
 				</view>
 			</view>
 		</view>
+		<up-popup :show="isAddAlbum" mode="center">
+			<view class="albumPopup">
+				<view class="popHeader">
+					<view></view>
+					<view class="title">创建相册</view>
+					<view class="close" @click="closeAlbumPopup">
+						<uni-icons type="closeempty" size="18" color="#999" />
+					</view>
+				</view>
+				<view class="content">
+					<up-form :model="albumForm" :rules="albumFormRules" ref="uFormRef" style="width: 100%;">
+						<view class="cu-form-group margin-top solid-bottom">
+							<up-form-item labelWidth="60" style="width: 100%;" label="相册名" prop="name">
+								<up-input v-model="albumForm.name" placeholder="请输入相册名" border="surround" clearable />
+							</up-form-item>
+						</view>
+						<view class="cu-form-group">
+							<up-form-item labelWidth="60" style="width: 100%;" label="排序" prop="sort">
+								<up-input v-model="albumForm.sort" type="number" border="surround" clearable />
+							</up-form-item>
+						</view>
+					</up-form>
+				</view>
+				<view class="foot">
+					<view class="padding margin-top-xs">
+						<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="createAlbum">创建</up-button>
+					</view>
+				</view>
+			</view>
+		</up-popup>
 	</view>
 </template>
 
 <script setup>
+	import {
+		requestApi
+	} from '@/api/apis';
+	import {
+		compareTimestamp
+	} from '@/utils/common.js'
+
 	const cardCur = ref(0)
 	const towerStart = ref(0)
 	const direction = ref("")
-	const swiperList = ref([{
-		id: 0,
-		type: 'image',
-		text: '卡通制作人',
-		url: 'https://cdn.zhoukaiwen.com/kt1.jpg'
-	}, {
-		id: 1,
-		type: 'image',
-		text: '小红书趣图',
-		url: 'https://zhoukaiwen.com/img/qh/kt3.jpg',
-	}, {
-		id: 2,
-		type: 'image',
-		text: 'A顶合照',
-		url: 'https://zhoukaiwen.com/img/qh/he1.jpg'
-	}, {
-		id: 3,
-		type: 'image',
-		text: '摄影师小杰',
-		url: 'https://zhoukaiwen.com/img/qh/he2.jpg'
-	}, {
-		id: 3,
-		type: 'image',
-		text: '摄影叉烧饭',
-		url: 'https://zhoukaiwen.com/img/qh/wxt1.jpg'
-	}, {
-		id: 3,
-		type: 'image',
-		text: '缆车抓拍',
-		url: 'https://zhoukaiwen.com/img/qh/he3.jpg'
-	}])
-	
-	onLoad(() => {
-		towerSwiper()
+	const swiperList = ref([])
+	const albumList = ref([])
+	// 表单引用
+	const uFormRef = ref(null);
+	const albumForm = ref({
+		name: "",
+		sort: 125,
 	})
-
-	const towerSwiper = () => {
-		for (let i = 0; i < swiperList.value.length; i++) {
-			swiperList.value[i].zIndex = parseInt(swiperList.value.length / 2) + 1 - Math.abs(i - parseInt(swiperList
-				.value.length / 2))
-			swiperList.value[i].mLeft = i - parseInt(swiperList.value.length / 2)
+	const isAddAlbum = ref(false)
+	/* 校验规则 */
+	const albumFormRules = {
+		name: [{
+			required: true,
+			message: "请输入相册名",
+			trigger: ["blur", "change"]
+		}, {
+			asyncValidator: (rule, value, callback) => {
+				// 查询是否存在相同名称相册
+				requestApi('checkAlbum', {
+					name: value
+				}).then(res => {
+					if(typeof(res) == 'undefined') {
+						callback();
+					} else {
+						callback(new Error('已存在同名相册'));
+					}
+				})
+			},
+			// 触发器可以同时用blur和change
+			trigger: ['blur'],
+		}],
+		sort: {
+			required: true,
+			type: 'number',
+			message: "排序值必须为数字",
+			trigger: ["blur", "change"]
 		}
 	}
 
+	onLoad(() => {
+		towerSwiper()
+		newAlbum()
+	})
+
+	/* 生成精选照片 */
+	const towerSwiper = async () => {
+		let photos = await requestApi('refinePhotos')
+		if(photos) {
+			for (let i = 0; i < photos.length; i++) {
+				photos[i].zIndex = parseInt(photos.length / 2) + 1 - Math.abs(i - parseInt(photos.length / 2))
+				photos[i].mLeft = i - parseInt(photos.length / 2)
+			}
+		}
+
+		swiperList.value = photos
+	}
+
+	/* 获取最新相册 */
+	const newAlbum = async () => {
+		let albums = await requestApi('newAlbum')
+		albumList.value = albums
+	}
+
+	/* 预览照片 */
 	const previewImg = (imgUrl) => {
-		console.log(imgUrl);
 		// 预览图片
 		uni.previewImage({
 			urls: [imgUrl],
@@ -165,11 +192,48 @@
 			}
 		});
 	}
+
+	/* 切换照片 */
 	const cardSwiper = (e) => {
 		cardCur.value = e.detail.current
 	}
+
+	/* 点击照片名 */
 	const clickItem = (index) => {
 		cardCur.value = index;
+	}
+
+	/* 相册跳转 */
+	const goTimeLine = (albumId) => {
+		uni.navigateTo({
+			url: './timeLine?id=' + albumId
+		})
+	}
+	
+	/* 创建相册 */
+	const createAlbum = () => {
+		uFormRef.value.validate().then(async valid => {
+			if (valid) {
+				await requestApi("addAlbum", albumForm.value, {
+					method: 'POST'
+				}).then(async res => {
+					uni.showToast({
+						title: '创建成功！',
+						icon: 'none'
+					});
+					
+					// 刷新相册集
+					newAlbum()
+				})
+			}
+		}).finally(() => {
+			isAddAlbum.value = false
+		});
+	}
+	
+	/* 关闭创建相册弹窗 */
+	const closeAlbumPopup = () => {
+		isAddAlbum.value = false
 	}
 </script>
 
@@ -272,128 +336,65 @@
 		background-image: linear-gradient(45deg, #28b389, #beecd8);
 	}
 
-	// 结束
+	.plus {
+		display: flex;
+		margin-right: 20rpx;
+		font-size: 32rpx;
+		color: #888;
+	}
 
-	.image-piccapsule {
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: top;
-		border-radius: 10px 10px 0 0;
+	.albumPopup {
+		background: #fff;
+		padding: 30rpx;
+		width: 70vw;
+		border-radius: 30rpx;
+		overflow: hidden;
 
-		.image-capsule {
-			padding: 55px 0px;
-			font-size: 20px;
-			font-weight: 300;
-			position: relative;
+		.popHeader {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-			.photographer {
-				position: absolute;
-				color: #FFFFFF;
-				left: 105rpx;
-				top: 62rpx;
-				font-size: 38rpx;
-				letter-spacing: 4rpx;
-				font-weight: 500;
-				vertical-align: text-bottom;
-				opacity: .85;
+			.title {
+				color: $text-font-color-2;
+				font-size: 26rpx;
 			}
 
-			.photographerS1,
-			.photographerS2 {
-				position: absolute;
-				color: #FFFFFF;
-				font-size: 28rpx;
-				opacity: .7;
-				font-weight: 500;
-			}
-
-			.photographerS1 {
-				left: 160rpx;
-				bottom: 30rpx;
-			}
-
-			.photographerS2 {
-				left: 300rpx;
-				bottom: 30rpx;
+			.close {
+				padding: 6rpx;
 			}
 		}
-	}
 
+		.content {
+			display: flex;
+			padding: 30rpx 0;
+			justify-content: center;
+			align-items: center;
 
-	// 横滑海报
-	.kite-classify-scroll {
-		width: 100%;
-		padding: 10rpx;
-		overflow: hidden;
-		white-space: nowrap;
-		background-color: #ffffff;
-	}
+			.text {
+				padding-left: 10rpx;
+				color: #ffca3e;
+				width: 80rpx;
+				line-height: 1em;
+				text-align: right;
+			}
 
-	.kite-classify-cell {
-		display: inline-block;
-		width: 280rpx;
-		background-color: #000000;
-		border-radius: 10rpx;
-		overflow: hidden;
-		position: relative;
-	}
+			.row {
+				display: flex;
+				padding: 16rpx 0;
+				font-size: 32rpx;
+				line-height: 1.7em;
+				align-items: center;
+				min-height: 100upx;
+				justify-content: space-between;
+			}
+		}
 
-	.demo-price {
-		position: absolute;
-		right: 20rpx;
-		top: 20rpx;
-		background: rgba(0, 0, 0, .5);
-		padding: 8rpx 12rpx;
-		border-radius: 10rpx;
-		color: #EEEEEE;
-		font-size: 22rpx;
-	}
-
-	.demo-title {
-		width: 100%;
-		font-size: 26rpx;
-		position: absolute;
-		bottom: 0rpx;
-		left: 0rpx;
-		background: rgba(0, 0, 0, .5);
-		padding: 12rpx;
-		text-align: center;
-		color: #EEEEEE;
-		overflow: hidden;
-		/*超出部分隐藏*/
-		white-space: nowrap;
-		/*不换行*/
-		text-overflow: ellipsis;
-		/*超出部分文字以...显示*/
-	}
-
-	.demo-tag {
-		padding: 10rpx;
-		display: flex;
-		justify-content: space-around;
-	}
-
-	.demo-tag-owner {
-		background-color: #fff;
-		color: #FFFFFF;
-		display: flex;
-		align-items: center;
-		padding: 4rpx 14rpx;
-		border-radius: 50rpx;
-		font-size: 20rpx;
-		line-height: 1;
-	}
-
-	.demo-tag-text {
-		border: 1px solid #fff;
-		color: #fff;
-		margin-left: 10px;
-		border-radius: 50rpx;
-		line-height: 1;
-		padding: 4rpx 14rpx;
-		display: flex;
-		align-items: center;
-		border-radius: 50rpx;
-		font-size: 20rpx;
+		.footer {
+			padding: 10rpx 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 	}
 </style>

@@ -48,9 +48,7 @@
 </template>
 
 <script setup>
-	import {
-		requestApi
-	} from '@/api/apis';
+	import { requestApi } from '@/api/apis';
 
 	const captcha = ref("")
 	const captchaImage = ref("")

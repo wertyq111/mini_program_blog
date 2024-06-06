@@ -17,7 +17,7 @@ const API_LIST = {
 	getQiniuToken: '/qiniu/up-token', //获取七牛云token
 	addWallPagerClassify: '/wallpaper-classify/add', //添加壁纸分类
 	addWallPager: '/wallpaper/add', //添加壁纸
-	editMember: '/members', //编辑会员信息
+	editMember: '/members', //编辑/删除会员信息
 	notebookList: '/articles/index', // 文章列表
 	notebookDetail: '/articles/show', // 文章列表
 	notebookGood: '/articles/good', // 文章点赞
@@ -26,7 +26,14 @@ const API_LIST = {
 	normalRegister: '/user/register', // 用户注册
 	mobileCaptcha: '/verification-code/send', // 获取短信验证码
 	queryUsername: '/user/query-username', // 获取短信验证码
-	normalForget: '/user/forget' // 忘记密码
+	normalForget: '/user/forget', // 忘记密码
+	refinePhotos: '/photo/refine', // 精制照片	
+	addPhoto: '/photo/add', // 添加照片
+	editPhoto: '/photo', // 编辑/删除照片
+	newAlbum: '/photo-categories/new', // 最新相册
+	albumInfo: '/photo-categories', // 相册详情
+	checkAlbum: '/photo-categories/check', // 相册校验
+	addAlbum: '/photo-categories/add', //  创建相册
 }
 
 export function requestApi(target, data = {}, config = {}, isSplic = false) {

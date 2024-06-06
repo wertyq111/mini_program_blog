@@ -97,6 +97,9 @@
 	export default {
 		name: 'u-image',
 		mixins: [mpMixin, mixin, props],
+		option: {
+			styleIsolation: 'shared', // 解除样式隔离
+		},
 		data() {
 			return {
 				// 图片是否加载错误，如果是，则显示错误占位图
