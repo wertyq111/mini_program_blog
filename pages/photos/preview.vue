@@ -1,12 +1,16 @@
 <template>
-<view class="preview" v-if="currentInfo">
+	<view class="preview" v-if="currentInfo">
 		<swiper circular :current="currentIndex" @change="swiperChange">
 			<swiper-item v-for="(item, index) in photosList" :key="item.id">
-				<u-image v-if="readImgs.includes(index)" @click="maskChange" :src="item.picUrl" width="100%" height="100vh"  mode="aspectFit" :showMenuByLongpress="false" />
-			</swiper-item>
+					<movable-area v-if="readImgs.includes(index)" class="movable-area" scale-area>
+						<movable-view class="movable-view" direction="all" :scale="true" scale-min="1">
+							<image @click="maskChange" :src="item.picUrl"  mode="aspectFit" />
+						</movable-view>
+					</movable-area>
+			</swiper-item> 
 		</swiper>
 		<view class="mask" v-if="maskStatus">
-			<go-to :url="isShare ? '/pages/classify/classify' : ''"/>
+			<go-to :url="isShare ? '/pages/classify/classify' : ''" />
 			<view class="count">{{ currentIndex + 1 }} / {{ photosList.length }}</view>
 			<view class="time">
 				<uni-dateformat :date="new Date()" format="hh:mm"></uni-dateformat>
@@ -39,7 +43,7 @@
 					<up-form ref="uFormRef" style="width: 100%;">
 						<view class="row">
 							<up-form-item labelWidth="80" style="width: 100%;" label="精选标题" prop="remark">
-								<up-input v-model="remark" placeholder="请输入精选标题" border="none" ></up-input>
+								<up-input v-model="remark" placeholder="请输入精选标题" border="none"></up-input>
 							</up-form-item>
 						</view>
 						<view class="row">
@@ -50,7 +54,7 @@
 					</up-form>
 				</view>
 				<view class="footer">
-					<button @click="submitRefine" type="default" size="mini" plain>提交</button>
+					<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" :customStyle="{width: '50%'}" @click="submitRefine">提交</up-button>
 				</view>
 			</view>
 		</uni-popup>
@@ -58,7 +62,9 @@
 </template>
 
 <script setup>
-	import { requestApi } from '@/api/apis';
+	import {
+		requestApi
+	} from '@/api/apis';
 	const maskStatus = ref(true)
 	const infoPopup = ref(null)
 	const refinePopup = ref(null)
@@ -69,63 +75,68 @@
 	const isShare = ref(false)
 	const remark = ref("")
 	const show = ref(false)
-	
+
 	// 根据传参获取图片信息
 	onLoad(async (e) => {
-		let { id,type } = e	
-		if(type == 'share') {
+		let {
+			id,
+			type
+		} = e
+		if (type == 'share') {
 			isShare.value = true
-			photosList.value = await requestApi("editPhoto", {id}, {}, true)
+			photosList.value = await requestApi("editPhoto", {
+				id
+			}, {}, true)
 		} else {
 			// 获取缓存
 			photosList.value = uni.getStorageSync("storagePhotosList")
 			currentIndex.value = photosList.value.findIndex(item => item.id === parseInt(id))
 		}
-						
+
 		currentInfo.value = photosList.value[currentIndex.value]
 		setReadImgs()
 	})
-	
+
 	// 滑动图片事件
 	const swiperChange = (e) => {
 		currentIndex.value = e.detail.current
 		currentInfo.value = photosList.value[currentIndex.value]
 		setReadImgs()
-	
+
 	}
-	
+
 	// 隐藏显示遮罩层
 	const maskChange = () => {
 		maskStatus.value = !maskStatus.value
 	}
-	
-	
+
+
 	// 弹出图片信息
 	const clickInfo = () => {
 		infoPopup.value.open()
 	}
-	
+
 	// 关闭图片信息
 	const clickInfoClose = () => {
 		infoPopup.value.close()
 	}
-	
+
 	// 精选弹窗
-	const clickRefine = () => {		
+	const clickRefine = () => {
 		show.value = currentInfo.value.show ? true : false
 		remark.value = currentInfo.value.remark
-		
+
 		refinePopup.value.open()
 	}
-	
+
 	// 关闭精选弹窗
 	const clickRefineClose = () => {
 		refinePopup.value.close()
 	}
-	
+
 	// 确认频分
 	const submitRefine = async () => {
-		if(show.value  && !remark.value) {
+		if (show.value && !remark.value) {
 			uni.showToast({
 				title: "请编辑精选标题",
 				icon: "none"
@@ -135,13 +146,17 @@
 		uni.showLoading({
 			title: "加载中..."
 		})
-		let {id} = currentInfo.value
+		let {
+			id
+		} = currentInfo.value
 		let params = {
 			id,
 			remark: remark.value,
 			show: show.value
 		}
-		let res = await requestApi("editPhoto", params, {method: 'POST'}, true)
+		let res = await requestApi("editPhoto", params, {
+			method: 'POST'
+		}, true)
 		uni.hideLoading()
 		if ("id" in res) {
 			uni.showToast({
@@ -155,7 +170,7 @@
 		uni.setStorageSync("storgPhotosList", photosList.value)
 		clickRefineClose()
 	}
-	
+
 	// 下载图片
 	const clickDownload = async () => {
 		// #ifdef H5
@@ -164,13 +179,13 @@
 			showCancel: false
 		})
 		// #endif
-	
+
 		// #ifndef H5
 		try {
 			uni.showLoading({
 				title: "下载中..."
 			})
-			
+
 			// 保存图片
 			uni.getImageInfo({
 				src: currentInfo.value.picUrl,
@@ -203,7 +218,7 @@
 												if (setting
 													.authSetting[
 														'scope.writePhotosAlbum'
-														]) {
+													]) {
 													uni.showToast({
 														title: "获取授权成功",
 														icon: "none"
@@ -233,7 +248,7 @@
 		}
 		// #endif
 	}
-	
+
 	// 设置已读图片
 	function setReadImgs() {
 		readImgs.value.push(
@@ -241,23 +256,27 @@
 			currentIndex.value,
 			currentIndex.value === photosList.value.length - 1 ? 0 : currentIndex.value + 1
 		)
-	
+
 		// 数组去重
 		readImgs.value = [...new Set(readImgs.value)]
 	}
-	
+
 	// 验证我的下载
 	async function checkDownload() {
 		try {
-			let {id} = currentInfo.value
-			let params = {id}
+			let {
+				id
+			} = currentInfo.value
+			let params = {
+				id
+			}
 			await requestApi("downloadWall", params, {}, true)
 			return true
 		} catch (e) {
 			throw e
 		}
 	}
-	
+
 	// 分享给好友
 	onShareAppMessage((e) => {
 		return {
@@ -268,7 +287,7 @@
 </script>
 
 <style lang="scss" scoped>
-.preview {
+	.preview {
 		width: 100%;
 		height: 100vh;
 		position: relative;
@@ -277,9 +296,9 @@
 		swiper {
 			width: 100%;
 			height: 100%;
-			
+
 			.line {}
-			
+
 		}
 	}
 
@@ -393,7 +412,7 @@
 				line-height: 1em;
 				text-align: right;
 			}
-			
+
 			.row {
 				display: flex;
 				padding: 16rpx 0;
@@ -412,5 +431,33 @@
 			align-items: center;
 		}
 	}
+	
+	.movable-view {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    height: 100%;
+	    width: 100%;
+	    text-align: center;
+	}
+	
+	.movable-area {
+		width: 100vw;
+	    height: 100vh;
+	}
+	
+	.movable-view image {
+	    width: 100%;
+		height: 100%;
+	}
+	
+	.lookimg {
+	    display: block;
+	    position: fixed;
+	    left: 0;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    margin: auto;
+	}
 </style>
-
