@@ -26,7 +26,7 @@
 						<swiper-item v-for="(item,index) in swiperList" :key="index"
 							:class="cardCur == index ? 'cur' : ''" @click="previewImg(item.url)">
 							<view class="swiper-item image-banner">
-								<up-image :src="item.url">
+								<up-image :src="item.url" width="100%" height="500rpx" mode="scaleToFill">
 									<template #error>
 										<view style="font-size: 24rpx;">加载失败</view>
 									</template>
