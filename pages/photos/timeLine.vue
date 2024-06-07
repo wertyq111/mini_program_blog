@@ -131,7 +131,7 @@
 				data[yearIdx]['month'][monthIdx]['day'][dayIdx].list.push({
 					id: photos[i].id,
 					picUrl: photos[i].url,
-					smallPicUrl: photos[i].url + "?imageMogr2/thumbnail/!30p",
+					smallPicUrl: photos[i].thumbnailUrl,
 					remark: photos[i].remark,
 					show: photos[i].show
 				})
@@ -139,11 +139,11 @@
 				data[yearIdx]['month'][monthIdx]['day'].push({
 					day: compareUppercaseDate(date.getDay(), 'week'),
 					date: compareUppercaseDate(date.getDate(), 'day'),
-					url: photos[i].url + "?imageMogr2/thumbnail/!30p",
+					url: photos[i].thumbnailUrl,
 					list: [{
 						id: photos[i].id,
 						picUrl: photos[i].url,
-						smallPicUrl: photos[i].url + "?imageMogr2/thumbnail/!30p",
+						smallPicUrl: photos[i].thumbnailUrl,
 						remark: photos[i].remark,
 						show: photos[i].show
 					}],

@@ -70,32 +70,18 @@
 	const remark = ref("")
 	const show = ref(false)
 	
-	// 获取缓存
-	const storagePhotosList = uni.getStorageSync("storagePhotosList")
-	// 复制数组，新增大图 url
-	photosList.value = storagePhotosList.map(item => {
-		return {
-			...item,
-			picUrl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
-		}
-	})
-	
 	// 根据传参获取图片信息
 	onLoad(async (e) => {
 		let { id,type } = e	
 		if(type == 'share') {
 			isShare.value = true
 			photosList.value = await requestApi("editPhoto", {id}, {}, true)
-			photosList.value = photosList.value.map(item => {
-				return {
-					...item,
-					picUrl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
-				}
-			})
 		} else {
+			// 获取缓存
+			photosList.value = uni.getStorageSync("storagePhotosList")
 			currentIndex.value = photosList.value.findIndex(item => item.id === parseInt(id))
 		}
-				
+						
 		currentInfo.value = photosList.value[currentIndex.value]
 		setReadImgs()
 	})
