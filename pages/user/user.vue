@@ -46,6 +46,8 @@
 				</user-column>
 			</view>
 		</view>
+		
+		<up-button :customStyle="{position: 'fixed', bottom: (getNavBarHeight() + 10) + 'px'}" color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle"size="large" @click="logout">退出账号</up-button>
 	</view>
 	<view v-else>
 		<view :style="{height: getNavBarHeight() + 'px'}"></view>
@@ -283,6 +285,14 @@
 		}
 
 		isEdit.value = false
+	}
+	
+	/* 退出账号 */
+	const logout = () => {
+		uni.clearStorageSync()
+		uni.navigateTo({
+			url: "/pages/login/normal-login"
+		})
 	}
 
 	getUserInfo()

@@ -30,6 +30,7 @@ const API_LIST = {
 	refinePhotos: '/photo/refine', // 精制照片	
 	addPhoto: '/photo/add', // 添加照片
 	editPhoto: '/photo', // 编辑/删除照片
+	batchDeletePhoto: '/photo/batch-delete', // 批量删除照片
 	newAlbum: '/photo-categories/new', // 最新相册
 	albumInfo: '/photo-categories', // 相册详情
 	checkAlbum: '/photo-categories/check', // 相册校验
