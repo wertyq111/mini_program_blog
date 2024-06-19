@@ -6,7 +6,7 @@
 			</view>
 		</view>
 
-<!-- 		<swiper class="card-swiper round-dot" previous-margin="1rpx" :indicator-dots="false" :circular="true"
+		<!-- 		<swiper class="card-swiper round-dot" previous-margin="1rpx" :indicator-dots="false" :circular="true"
 			:autoplay="true" interval="5000" duration="500" @change="cardSwiper" indicator-color="#ffffff"
 			indicator-active-color="#ffffff" style="margin-top: -320rpx;">
 			<swiper-item v-for="(item,index) in swiperList" :key="index" :class="cardCur == index ? 'cur':''">
@@ -55,11 +55,18 @@
 
 	const cardCur = ref(0)
 
-	const tools = ref([{
-		title: 'photos/photos',
-		name: '照片墙',
-		color: ''
-	}])
+	const tools = ref([
+		{
+			title: 'photos/photos',
+			name: '照片墙',
+			color: ''
+		},
+		{
+			title: 'house/house',
+			name: '我的小屋',
+			color: ''
+		}
+	])
 
 	const cardSwiper = e => {
 		cardCur.value = e.detail.current

@@ -2,12 +2,12 @@
 	<view class="preview" v-if="currentInfo">
 		<swiper circular :current="currentIndex" @change="swiperChange">
 			<swiper-item v-for="(item, index) in photosList" :key="item.id">
-					<movable-area v-if="readImgs.includes(index)" class="movable-area" scale-area>
-						<movable-view class="movable-view" direction="all" :scale="true" scale-min="1">
-							<image @click="maskChange" :src="item.picUrl"  mode="aspectFit" />
-						</movable-view>
-					</movable-area>
-			</swiper-item> 
+				<movable-area v-if="readImgs.includes(index)" class="movable-area" scale-area>
+					<movable-view class="movable-view" direction="all" :scale="true" scale-min="1">
+						<image @click="maskChange" :src="item.picUrl" mode="aspectFit" />
+					</movable-view>
+				</movable-area>
+			</swiper-item>
 		</swiper>
 		<view class="mask" v-if="maskStatus">
 			<go-to :url="isShare ? '/pages/classify/classify' : ''" />
@@ -54,7 +54,8 @@
 					</up-form>
 				</view>
 				<view class="footer">
-					<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" :customStyle="{width: '50%'}" @click="submitRefine">提交</up-button>
+					<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle"
+						:customStyle="{width: '50%'}" @click="submitRefine">提交</up-button>
 				</view>
 			</view>
 		</uni-popup>
@@ -431,33 +432,33 @@
 			align-items: center;
 		}
 	}
-	
+
 	.movable-view {
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
-	    height: 100%;
-	    width: 100%;
-	    text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+		text-align: center;
 	}
-	
+
 	.movable-area {
 		width: 100vw;
-	    height: 100vh;
+		height: 100vh;
 	}
-	
+
 	.movable-view image {
-	    width: 100%;
+		width: 100%;
 		height: 100%;
 	}
-	
+
 	.lookimg {
-	    display: block;
-	    position: fixed;
-	    left: 0;
-	    top: 0;
-	    right: 0;
-	    bottom: 0;
-	    margin: auto;
+		display: block;
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
 	}
 </style>

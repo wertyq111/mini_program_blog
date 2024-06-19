@@ -167,6 +167,23 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/house/house",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的房屋",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/house/materials",
+			"style" : 
+			{
+				"navigationBarTitleText" : "物品清单",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	// "tabBar": {

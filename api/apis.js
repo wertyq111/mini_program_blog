@@ -35,10 +35,17 @@ const API_LIST = {
 	albumInfo: '/photo-categories', // 相册详情
 	checkAlbum: '/photo-categories/check', // 相册校验
 	addAlbum: '/photo-categories/add', //  创建相册
+	home: '/house', // 房屋
+	image: '/image', // 图片
 }
 
 export function requestApi(target, data = {}, config = {}, isSplic = false) {
 	let url = API_LIST[target]
+	if(target.indexOf('-') > 0) {
+		let targetArray = target.split('-')
+		url = API_LIST[targetArray[0]] + "/" + targetArray[1]
+	}
+		
 	if(isSplic === true) {
 		url = url + "/" + (data.id || null)
 	}
