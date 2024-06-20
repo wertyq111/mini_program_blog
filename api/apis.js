@@ -45,6 +45,7 @@ export function requestApi(target, data = {}, config = {}, isSplic = false) {
 		let targetArray = target.split('-')
 		url = API_LIST[targetArray[0]] + "/" + targetArray[1]
 	}
+	console.log(url);
 		
 	if(isSplic === true) {
 		url = url + "/" + (data.id || null)

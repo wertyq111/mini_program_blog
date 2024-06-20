@@ -184,6 +184,15 @@
 				"navigationBarTitleText" : "物品清单",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path" : "pages/house/home",
+			"style" : 
+			{
+				"navigationBarTitleText" : "房间区域",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	// "tabBar": {

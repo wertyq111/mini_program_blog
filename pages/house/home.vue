@@ -1,84 +1,77 @@
 <template>
-	<view class="contaier">
-		<home-header title="我的房屋" />
+	<view class="contaier" v-if="homeDetail">
+		<home-header :title="homeDetail.name" :url="homeDetail.picUrl" />
 		<view class="wrap">
 			<view class="page-box">
-				<template v-if="homeList && homeList.length > 0">
-					<view class="order" v-for="home in homeList" :key="home.id">
+				<template v-if="areaList && areaList.length > 0">
+					<view class="order" v-for="area in areaList" :key="area.id">
 						<view class="top">
 							<view class="left">
 								<uni-text class="cuIcon-titles text-blue"></uni-text>
-								<view class="store">{{ home.name }}</view>
+								<view class="store">{{ area.name }}</view>
 								<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 							</view>
 							<view class="right">
 								<view class="progressBox">
-									<up-icon name="edit-pen" size="25" @click="editHome(home)"></up-icon>
+									<up-icon name="edit-pen" size="25" @click="editarea(area)"></up-icon>
 								</view>
 								<view class="progressBox">
-									<up-icon name="trash" size="25" @click="confirmDeleteHome(home)"></up-icon>
+									<up-icon name="trash" size="25" @click="confirmDeletearea(area)"></up-icon>
 								</view>
 							</view>
 						</view>
 						<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
 						<view class="bottom">
-							<view v-if="home.children">
+							<view v-if="area.materials">
 								<view class="cu-avatar-group" style="padding-left: 24rpx;">
-									
+									<up-avatar v-for="material in area.materials" :key="material.id"
+										text="material.name" fontSize="18" randomBgColor />
 								</view>
-								<view class="cu-avatar-group" style="padding-left: 24rpx;">
-									<view class="cu-avatar round" v-for="child in home.children" :key="child.id" :style="[{ backgroundImage:'url(' + child.picUrl + ')' }]">
-										<!-- <view class="cu-avatar round" v-for="child in home.children" :key="child.id" >
-											<up-avatar :text="child.name" fontSize="18" randomBgColor />
-										</view> -->
-									</view>
-					
-								</view>
-								<text class="text-blue text-shadow">区域数量: {{ home.children.length}} 个</text>
+								<text class="text-blue text-shadow">物品总数: {{ area.materials.length}} 件</text>
 							</view>
 							<view v-else>
-								<text class="text-blue text-shadow">暂无区域</text>
+								<text class="text-blue text-shadow">暂无物品</text>
 							</view>
 							<view class="btnBox">
-								<view @click="goHome(home.id)" class="evaluate btn">房间信息</view>
+								<view @click="goarea(area.id)" class="evaluate btn">区域信息</view>
 							</view>
 						</view>
 					</view>
-					<view class="loadinglayout" v-if="homeList.length">
+					<view class="loadinglayout" v-if="areaList.length">
 						<uni-load-more :status="noData ? 'noMore' : 'loading'" />
 					</view>
 				</template>
 				<view v-else class="center">
 					<image src="https://cdn.chouy.xyz/static/empty/comment.png" mode="widthFix"></image>
 					<view class="explain">
-						暂无房间信息
+						暂无区域信息
 						<view class="tips"></view>
 					</view>
 				</view>
 				<up-button color="linear-gradient(45deg, #28b389, #beecd8)" :customStyle="{width: '200rpx'}"
-					shape="circle" icon="plus" iconColor="#fff" @click="homeShow = true">添加房间</up-button>
+					shape="circle" icon="plus" iconColor="#fff" @click="areaShow = true">添加区域</up-button>
 			</view>
 
 		</view>
 
-		<up-popup :show="homeShow" mode="center">
-			<view class="homePopup">
+		<up-popup :show="areaShow" mode="center">
+			<view class="areaPopup">
 				<view class="popHeader">
 					<view></view>
-					<view class="title">{{homeForm.id ? '修改房间' : '创建房间'}}</view>
-					<view class="close" @click="closeHomePopup">
+					<view class="title">{{areaForm.id ? '修改区域' : '创建区域'}}</view>
+					<view class="close" @click="closeareaPopup">
 						<uni-icons type="closeempty" size="18" color="#999" />
 					</view>
 				</view>
 				<view class="content">
-					<up-form :model="homeForm" :rules="homeFormRules" ref="uFormRef" style="width: 100%;">
+					<up-form :model="areaForm" :rules="areaFormRules" ref="uFormRef" style="width: 100%;">
 						<view class="cu-form-group margin-top solid-bottom">
-							<up-form-item labelWidth="80" style="width: 100%;" label="房间名" prop="name">
-								<up-input v-model="homeForm.name" placeholder="请输入房间名" border="surround" clearable />
+							<up-form-item labelWidth="80" style="width: 100%;" label="区域名" prop="name">
+								<up-input v-model="areaForm.name" placeholder="请输入区域名" border="surround" clearable />
 							</up-form-item>
 						</view>
 						<view class="cu-form-group">
-							<up-form-item labelWidth="80" style="width: 100%;" label="房间照片" prop="pic_url">
+							<up-form-item labelWidth="80" style="width: 100%;" label="区域照片" prop="pic_url">
 								<up-upload :fileList="uploadPhotos" @afterRead="afterRead" @delete="deletePic" name="1"
 									multiple :maxCount="1" :previewFullImage="true">
 								</up-upload>
@@ -88,15 +81,15 @@
 				</view>
 				<view class="foot">
 					<view class="padding margin-top-xs">
-						<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="updateHome"
-							:text="homeForm.id ? '更新' : '创建'"></up-button>
+						<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="updatearea"
+							:text="areaForm.id ? '更新' : '创建'"></up-button>
 					</view>
 				</view>
 			</view>
 		</up-popup>
 
 		<!-- 删除确认模态框 -->
-		<up-modal :show="confirmDelete" @confirm="deleteHome" @cancel="confirmDelete = false" ref="uModal" asyncClose
+		<up-modal :show="confirmDelete" @confirm="deletearea" @cancel="confirmDelete = false" ref="uModal" asyncClose
 			buttonReverse showCancelButton>确认删除{{deleteParams.name}}吗？</up-modal>
 	</view>
 </template>
@@ -105,14 +98,15 @@
 	import { requestApi } from '@/api/apis';
 	import { QINIU_URL, FILE_URL } from '@/utils/config';
 
-	const homeList = ref([])
+    const homeDetail = ref(null)
+	const areaList = ref([])
 	const noData = ref(false)
-	const homeShow = ref(false)
+	const areaShow = ref(false)
 	const uploadPhotos = ref([])
 	const confirmDelete = ref(false)
 	// 表单引用
 	const uFormRef = ref(null);
-	const homeForm = ref({
+	const areaForm = ref({
 		id: null,
 		name: "",
 		pic_url: ""
@@ -120,8 +114,6 @@
 
 	// 查询参数
 	var queryParams = {
-		pid: 0,
-		include: 'children',
 		page: 1,
 		perPage: 12
 	}
@@ -130,24 +122,25 @@
 	const deleteParams = ref({ id: null, name: "" })
 
 	/* 校验规则 */
-	const homeFormRules = {
+	const areaFormRules = {
 		name: [{
 			required: true,
-			message: "请输入房间名",
+			message: "请输入区域名",
 			trigger: ["blur", "change"]
 		}, {
 			asyncValidator: (rule, value, callback) => {
-				if (homeForm.value.id > 0) {
+				if (areaForm.value.id > 0) {
 					callback()
 				} else {
 					// 添加的时候查询是否存在相同名称相册
 					requestApi('home-check', {
-						name: value
+						name: value,
+						pid: homeDetail.value.id
 					}).then(res => {
 						if (typeof(res) == 'undefined') {
 							callback();
 						} else {
-							callback(new Error('已存在同名房间'));
+							callback(new Error('已存在同名区域'));
 						}
 					})
 				}
@@ -158,25 +151,28 @@
 		pic_url: {
 			required: true,
 			type: 'string',
-			message: "请上传房间图片",
+			message: "请上传区域图片",
 			trigger: ["blur", "change"]
 		}
 	}
 
 	/* 加载完毕 */
-	onLoad(() => {
-		getHomeList()
+	onLoad(e => {
+		let {id} = e
+		
+		//  获取房间信息
+		getHome(id)
 	})
 
 	/* 触底触发事件 */
 	onReachBottom(() => {
 		if (noData.value) return
 		queryParams.page++
-		getHomeList()
+		getareaList()
 	})
 	
 	/* 观察事件 */
-	watch(homeShow, (newVal, oldVal) => {
+	watch(areaShow, (newVal, oldVal) => {
 		if(newVal == false) {
 			initData()
 		}
@@ -187,7 +183,8 @@
 		let pic = uploadPhotos.value[e.index]
 		let deleteParams = {
 			url: pic.url,
-			type: 'home'
+			pid: homeDetail.value.id,
+			type: 'area'
 		}
 
 		await requestApi('image-delete', deleteParams, { method: 'DELETE' }).then(res => {
@@ -218,7 +215,7 @@
 				url: FILE_URL + "/" + pic.key
 			});
 			// 更新到表单参数中
-			homeForm.value.pic_url = FILE_URL + "/" + pic.key
+			areaForm.value.pic_url = FILE_URL + "/" + pic.key
 			fileListLen++;
 		}
 	};
@@ -245,11 +242,8 @@
 			suffix = url.substring(url.lastIndexOf('.'));
 		}
 
-		qiniuParam.key = "homes/" + user.member.id + "/" + new Date().getTime() + Math
-			.floor(Math
-				.random() *
-				1000) +
-			suffix;
+		qiniuParam.key = "homes/" + user.member.id + "/" + homeDetail.value.id + "/" + new Date().getTime() + Math
+			.floor(Math.random() * 1000) + suffix;
 
 		return new Promise((resolve, reject) => {
 			uni.uploadFile({
@@ -274,17 +268,17 @@
 		});
 	};
 
-	/* 创建/修改房间 */
-	const updateHome = () => {
+	/* 创建/修改区域 */
+	const updatearea = () => {
 		uFormRef.value.validate().then(async valid => {
 			if (valid) {
 				let target = "home-add"
 				let isSplic = false
-				if (homeForm.value.id > 0) {
+				if (areaForm.value.id > 0) {
 					target = "home"
 					isSplic = true
 				}
-				await requestApi(target, homeForm.value, {
+				await requestApi(target, areaForm.value, {
 					method: 'POST'
 				}, isSplic).then(res => {
 					uni.showToast({
@@ -292,85 +286,98 @@
 						icon: 'none'
 					});
 
-					// 刷新房间
-					getHomeList()
+					// 刷新区域
+					getareaList()
 				})
 			}
-			homeShow.value = false
+			areaShow.value = false
 		});
 	}
 
-	/* 获取房间列表 */
-	const getHomeList = async () => {
-		homeList.value = []
+	/* 获取区域列表 */
+	const getareaList = async () => {
+		areaList.value = []
 		let list = await requestApi('home-index', queryParams)
 
 		if (queryParams.perPage > list.length) noData.value = true
 
-		homeList.value = list
+		areaList.value = list
 
 		uni.stopPullDownRefresh()
 	}
 
 	/* 关闭弹出层 */
-	const closeHomePopup = () => {
-		homeShow.value = false
+	const closeareaPopup = () => {
+		areaShow.value = false
 	}
 
-	/* 编辑房间 */
-	const editHome = home => {
-		homeForm.value.id = home.id
-		homeForm.value.name = home.name
-		homeForm.value.pic_url = home.picUrl
+	/* 编辑区域 */
+	const editarea = area => {
+		areaForm.value.id = area.id
+		areaForm.value.name = area.name
+		areaForm.value.pic_url = area.picUrl
 		uploadPhotos.value = []
 		uploadPhotos.value.push({
-			url: home.picUrl
+			url: area.picUrl
 		})
 
-		homeShow.value = true
+		areaShow.value = true
 	}
 
-	/* 确认删除房间 */
-	const confirmDeleteHome = home => {
+	/* 确认删除区域 */
+	const confirmDeletearea = area => {
 		confirmDelete.value = true
-		deleteParams.value.id = home.id
-		deleteParams.value.name = home.name
+		deleteParams.value.id = area.id
+		deleteParams.value.name = area.name
 	}
 
-	/* 删除房间 */
-	const deleteHome = async () => {
+	/* 删除区域 */
+	const deletearea = async () => {
 		if (deleteParams.value.id > 0) {
 			await requestApi('home', deleteParams.value, { method: 'DELETE' }, true)
 				.then(res => {
-					confirmDelete.value = false
-					// 刷新房间
-					getHomeList()
+					// 刷新区域
+					getareaList()
 				}).catch(() => {
 					uni.showToast({
 						title: '删除失败',
 						icon: "none"
 					})
+				}).finally(() => {
 					confirmDelete.value = false
 				})
 		} else {
 			uni.showToast({
-				title: '请选择要删除的房间',
+				title: '请选择要删除的区域',
 				icon: "none"
 			})
 			confirmDelete.value = false
 		}
 	}
+	
+	/* 获取房间信息 */
+	const getHome = async id => {
+		homeDetail.value = await requestApi('home', {id}, {}, true)
+		
+		// 设置查询条件pid和表单 pid
+		queryParams.pid = homeDetail.value.id
+		areaForm.value.pid = homeDetail.value.id
+		
+		// 获取区域列表
+		getareaList()
+	}
 
-	/* 跳转房间 */
-	const goHome = id => {
-		let url = "./home?id=" + id
+	/* 跳转区域 */
+	const goArea = id => {
+		let url = "./material?id=" + id
 		uni.navigateTo({ url })
 	}
 	
 	/* 初始化数据 */
 	const initData = () => {
-		homeForm.value = {
+		areaForm.value = {
 			id: null,
+			pid: homeDetail.value.id,
 			name: "",
 			pic_url: ""
 		}
@@ -555,7 +562,7 @@
 		padding: 30rpx 0;
 	}
 
-	.homePopup {
+	.areaPopup {
 		background: #fff;
 		padding: 30rpx;
 		width: 70vw;
