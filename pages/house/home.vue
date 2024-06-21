@@ -13,10 +13,10 @@
 							</view>
 							<view class="right">
 								<view class="progressBox">
-									<up-icon name="edit-pen" size="25" @click="editarea(area)"></up-icon>
+									<up-icon name="edit-pen" size="25" @click="editArea(area)"></up-icon>
 								</view>
 								<view class="progressBox">
-									<up-icon name="trash" size="25" @click="confirmDeletearea(area)"></up-icon>
+									<up-icon name="trash" size="25" @click="confirmDeleteArea(area)"></up-icon>
 								</view>
 							</view>
 						</view>
@@ -33,7 +33,7 @@
 								<text class="text-blue text-shadow">暂无物品</text>
 							</view>
 							<view class="btnBox">
-								<view @click="goarea(area.id)" class="evaluate btn">区域信息</view>
+								<view @click="goArea(area.id)" class="evaluate btn">区域信息</view>
 							</view>
 						</view>
 					</view>
@@ -59,7 +59,7 @@
 				<view class="popHeader">
 					<view></view>
 					<view class="title">{{areaForm.id ? '修改区域' : '创建区域'}}</view>
-					<view class="close" @click="closeareaPopup">
+					<view class="close" @click="closeAreaPopup">
 						<uni-icons type="closeempty" size="18" color="#999" />
 					</view>
 				</view>
@@ -81,7 +81,7 @@
 				</view>
 				<view class="foot">
 					<view class="padding margin-top-xs">
-						<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="updatearea"
+						<up-button color="linear-gradient(45deg, #28b389, #beecd8)" shape="circle" @click="updateArea"
 							:text="areaForm.id ? '更新' : '创建'"></up-button>
 					</view>
 				</view>
@@ -89,7 +89,7 @@
 		</up-popup>
 
 		<!-- 删除确认模态框 -->
-		<up-modal :show="confirmDelete" @confirm="deletearea" @cancel="confirmDelete = false" ref="uModal" asyncClose
+		<up-modal :show="confirmDelete" @confirm="DeleteArea" @cancel="confirmDelete = false" ref="uModal" asyncClose
 			buttonReverse showCancelButton>确认删除{{deleteParams.name}}吗？</up-modal>
 	</view>
 </template>
@@ -168,7 +168,7 @@
 	onReachBottom(() => {
 		if (noData.value) return
 		queryParams.page++
-		getareaList()
+		 getAreaList()
 	})
 	
 	/* 观察事件 */
@@ -269,7 +269,7 @@
 	};
 
 	/* 创建/修改区域 */
-	const updatearea = () => {
+	const updateArea = () => {
 		uFormRef.value.validate().then(async valid => {
 			if (valid) {
 				let target = "home-add"
@@ -287,7 +287,7 @@
 					});
 
 					// 刷新区域
-					getareaList()
+					 getAreaList()
 				})
 			}
 			areaShow.value = false
@@ -295,7 +295,7 @@
 	}
 
 	/* 获取区域列表 */
-	const getareaList = async () => {
+	const  getAreaList = async () => {
 		areaList.value = []
 		let list = await requestApi('home-index', queryParams)
 
@@ -307,12 +307,12 @@
 	}
 
 	/* 关闭弹出层 */
-	const closeareaPopup = () => {
+	const closeAreaPopup = () => {
 		areaShow.value = false
 	}
 
 	/* 编辑区域 */
-	const editarea = area => {
+	const editArea = area => {
 		areaForm.value.id = area.id
 		areaForm.value.name = area.name
 		areaForm.value.pic_url = area.picUrl
@@ -325,19 +325,19 @@
 	}
 
 	/* 确认删除区域 */
-	const confirmDeletearea = area => {
+	const confirmDeleteArea = area => {
 		confirmDelete.value = true
 		deleteParams.value.id = area.id
 		deleteParams.value.name = area.name
 	}
 
 	/* 删除区域 */
-	const deletearea = async () => {
+	const DeleteArea = async () => {
 		if (deleteParams.value.id > 0) {
 			await requestApi('home', deleteParams.value, { method: 'DELETE' }, true)
 				.then(res => {
 					// 刷新区域
-					getareaList()
+					 getAreaList()
 				}).catch(() => {
 					uni.showToast({
 						title: '删除失败',
@@ -364,12 +364,12 @@
 		areaForm.value.pid = homeDetail.value.id
 		
 		// 获取区域列表
-		getareaList()
+		 getAreaList()
 	}
 
 	/* 跳转区域 */
 	const goArea = id => {
-		let url = "./material?id=" + id
+		let url = "./materials?id=" + id
 		uni.navigateTo({ url })
 	}
 	

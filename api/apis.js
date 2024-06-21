@@ -36,6 +36,7 @@ const API_LIST = {
 	checkAlbum: '/photo-categories/check', // 相册校验
 	addAlbum: '/photo-categories/add', //  创建相册
 	home: '/house', // 房屋
+	material: '/material', //物品
 	image: '/image', // 图片
 }
 
