@@ -189,9 +189,9 @@
 		areaDetail.value = await requestApi('home', { id }, {}, true)
 
 		// 设置查询条件house_id和表单 house_id
-		queryParams.house_id = areaDetail.value.id
+		queryParams.houseId = areaDetail.value.id
 		materialForm.value.house_id = areaDetail.value.id
-		
+				
 		// 设置头部标题
 		uni.setNavigationBarTitle({
 			title: areaDetail.value.name
