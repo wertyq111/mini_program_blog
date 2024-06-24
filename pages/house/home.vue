@@ -89,7 +89,7 @@
 		</up-popup>
 
 		<!-- 删除确认模态框 -->
-		<up-modal :show="confirmDelete" @confirm="DeleteArea" @cancel="confirmDelete = false" ref="uModal" asyncClose
+		<up-modal :show="confirmDelete" @confirm="deleteArea" @cancel="confirmDelete = false" ref="uModal" asyncClose
 			buttonReverse showCancelButton>确认删除{{deleteParams.name}}吗？</up-modal>
 	</view>
 </template>
@@ -332,7 +332,7 @@
 	}
 
 	/* 删除区域 */
-	const DeleteArea = async () => {
+	const deleteArea = async () => {
 		if (deleteParams.value.id > 0) {
 			await requestApi('home', deleteParams.value, { method: 'DELETE' }, true)
 				.then(res => {

@@ -4,15 +4,15 @@
 			<movable-view class="movable-view" :class="!isRemove?'animation-info':''" style="pointer-events: auto;"
 				@touchstart="touchstart" @touchend="touchend" @change="onChange" direction="all" inertia="true" :x="x"
 				:y="y" :disabled="disabled" :out-of-bounds="true" :damping="200" :friction="100">
-				<view @click="clickBtn">{{btnObj.name}}</view>
-				<view v-if="showBtn" v-for="(item,index) in btnObj.children" :key="index"
-					class="item-main"
+				<view @click="clickBtn" :style="{color: bubble.color}">{{bubble.name}}</view>
+				<view v-if="showBtn" v-for="(item,index) in bubble.children" :key="index" class="item-main"
 					:class="!isLeft?'item-main'+(index+1)+' toOut'+(index+1):'item-main1'+(index+1)+' toOut1'+(index+1)">
-					<template v-if="item.type == 'icon'"><up-icon :name="item.name" size="25" /></template>
+					<template v-if="item.type == 'icon'"><up-icon :name="item.name" size="25" :color="bubble.color"
+							@click="click(bubble, item.click)" /></template>
 					<template v-else-if="item.type == 'number'">
-						<up-input v-model="item.name" border="none" type="number" />
+						<up-text :color="bubble.color" :text="item.name" align="center" />
 					</template>
-					<text v-else>{{item.name}}</text>
+					<up-text v-else :color="bubble.color" :text="item.name" align="center" />
 				</view>
 			</movable-view>
 		</movable-area>
@@ -45,7 +45,7 @@
 			//按钮默认位置离顶部距离（px）
 			topPx: {
 				type: Number,
-				default:  0
+				default: 0
 			},
 			//按钮默认位置离左边距离（px）
 			leftPx: {
@@ -53,6 +53,7 @@
 				default: 30
 			},
 		},
+		emits: ['click', 'move'],
 		data() {
 			return {
 				left: 0,
@@ -70,6 +71,7 @@
 				},
 				showBtn: false,
 				isLeft: false,
+				bubble: this.btnObj
 			};
 		},
 		mounted() {
@@ -121,15 +123,20 @@
 							this.isLeft = false
 						})
 					}
+					// 同步坐标
+					this.$emit('move', {
+						x: this.x + (this.btnWidth / 2),
+						y:  this.y + ((this.btnHeight / 2) + (this.btnHeight / 3))
+					})
 					this.isRemove = false
 				}
 			},
 			clickBtn() {
 				this.showBtn = !this.showBtn
 			},
-			//点击菜单
-			click(item) {
-				this.$emit('click', item)
+			// 点击菜单
+			click(item, type) {
+				this.$emit('click', item, type)
 			}
 		}
 	};
@@ -304,7 +311,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		z-index: 999999 !important;
+		z-index: 99 !important;
 		pointer-events: none;
 	}
 </style>
