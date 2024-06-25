@@ -289,10 +289,11 @@
 	/* 删除物品 */
 	const deleteMaterial = async () => {
 		if (deleteParams.value.id > 0) {
+			let currIndex = materialList.value.map(i => i.id).indexOf(deleteParams.value.id)
 			await requestApi('material', deleteParams.value, { method: 'DELETE' }, true)
 				.then(res => {
-					// 刷新物品
-					 getMaterialList()
+					// 数组中删除元素
+					materialList.value.splice(currIndex, 1);
 				}).catch(() => {
 					uni.showToast({
 						title: '删除失败',

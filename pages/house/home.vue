@@ -13,6 +13,11 @@
 							</view>
 							<view class="right">
 								<view class="progressBox">
+									<image v-if="area.materials && area.materials.length > 0"
+										@click="showChart(area.materials)" :style="{width: '50rpx', height: '50rpx'}"
+										src="@/static/images/icons/chart.png" mode="aspectFill"></image>
+								</view>
+								<view class="progressBox">
 									<up-icon name="edit-pen" size="25" @click="editArea(area)"></up-icon>
 								</view>
 								<view class="progressBox">
@@ -23,10 +28,6 @@
 						<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
 						<view class="bottom">
 							<view v-if="area.materials">
-								<view class="cu-avatar-group" style="padding-left: 24rpx;">
-									<up-avatar v-for="material in area.materials" :key="material.id"
-										text="material.name" fontSize="18" randomBgColor />
-								</view>
 								<text class="text-blue text-shadow">物品总数: {{ area.materials.length}} 件</text>
 							</view>
 							<view v-else>
@@ -88,6 +89,32 @@
 			</view>
 		</up-popup>
 
+		<!-- 图表展示 -->
+		<up-popup :show="chartShow" mode="center">
+			<view class="chartPopup">
+				<view class="popHeader">
+					<view class="title">
+					<up-icon name="list" @click="chartPicker = true" size="28" />
+					<up-picker :show="chartPicker" :columns="chartTypes" keyName="name" @cancel="cancelChartPicker"
+						@confirm="confirmChartPicker" @change="changeChartPicker"></up-picker>
+					{{chartTypes[0][chartPickerValue].name}}
+					</view>
+					<view class="close" @click="closeChartPopup">
+						<uni-icons type="closeempty" size="18" color="#999" />
+					</view>
+				</view>
+				<view class="content">
+					<template v-if="chartPickerLoading">
+						<up-loadmore :status="'loading'" :loading-text="'加载中'" />
+					</template>
+					<view v-else class="charts-box">
+						<qiun-data-charts :type="chartTypes[0][chartPickerValue].type"
+							:opts="chartTypes[0][chartPickerValue].opts" :chartData="chartData" />
+					</view>
+				</view>
+			</view>
+		</up-popup>
+
 		<!-- 删除确认模态框 -->
 		<up-modal :show="confirmDelete" @confirm="deleteArea" @cancel="confirmDelete = false" ref="uModal" asyncClose
 			buttonReverse showCancelButton>确认删除{{deleteParams.name}}吗？</up-modal>
@@ -98,12 +125,108 @@
 	import { requestApi } from '@/api/apis';
 	import { QINIU_URL, FILE_URL } from '@/utils/config';
 
-    const homeDetail = ref(null)
+	const homeDetail = ref(null)
 	const areaList = ref([])
 	const noData = ref(false)
 	const areaShow = ref(false)
 	const uploadPhotos = ref([])
 	const confirmDelete = ref(false)
+	const chartShow = ref(false)
+	const chartType = ref("")
+	const chartTypeName = ref("")
+	const chartPicker = ref(false)
+	const chartPickerValue = ref(0)
+	const chartPickerLoading = ref(false)
+	const chartTypes = reactive([
+		[{
+				type: 'pie',
+				name: '饼状图',
+				opts: {
+					color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+						"#ea7ccc"
+					],
+					padding: [5, 5, 5, 5],
+					enableScroll: false,
+					extra: {
+						pie: {
+							activeOpacity: 0.5,
+							activeRadius: 10,
+							offsetAngle: 0,
+							labelWidth: 15,
+							border: true,
+							borderWidth: 3,
+							borderColor: "#FFFFFF",
+							linearType: "custom"
+						}
+					},
+				}
+			},
+			{
+				type: 'column',
+				name: '柱状图',
+				opts: {
+					color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+						"#ea7ccc"
+					],
+					padding: [15, 15, 0, 5],
+					enableScroll: false,
+					enableMarkLine: true,
+					legend: {},
+					xAxis: {
+						disableGrid: true
+					},
+					yAxis: {
+						data: [{
+							min: 0
+						}]
+					},
+					extra: {
+						column: {
+							type: "group",
+							width: 30,
+							activeBgColor: "#000000",
+							activeBgOpacity: 0.08,
+							seriesGap: 5,
+							barBorderRadius: [6, 6, 6, 6]
+						},
+						markLine: {}
+					}
+				}
+			},
+			{
+				type: 'radar',
+				name: '雷达图',
+				opts: {
+					color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+						"#ea7ccc"
+					],
+					padding: [5, 5, 5, 5],
+					dataLabel: true,
+					dataPointShape: false,
+					enableScroll: false,
+					legend: {
+						show: true,
+						position: "right",
+						lineHeight: 25
+					},
+					extra: {
+						radar: {
+							gridType: "circle",
+							gridColor: "#CCCCCC",
+							gridCount: 3,
+							opacity: 1,
+							max: 8,
+							labelShow: true,
+							linearType: "custom",
+							border: false
+						}
+					}
+				}
+			}
+		]
+	]);
+	const chartData = ref()
+	const chartMarterials = ref()
 	// 表单引用
 	const uFormRef = ref(null);
 	const areaForm = ref({
@@ -114,6 +237,7 @@
 
 	// 查询参数
 	var queryParams = {
+		include: "materials",
 		page: 1,
 		perPage: 12
 	}
@@ -158,8 +282,8 @@
 
 	/* 加载完毕 */
 	onLoad(e => {
-		let {id} = e
-		
+		let { id } = e
+
 		//  获取房间信息
 		getHome(id)
 	})
@@ -168,12 +292,12 @@
 	onReachBottom(() => {
 		if (noData.value) return
 		queryParams.page++
-		 getAreaList()
+		getAreaList()
 	})
-	
+
 	/* 观察事件 */
 	watch(areaShow, (newVal, oldVal) => {
-		if(newVal == false) {
+		if (newVal == false) {
 			initData()
 		}
 	})
@@ -287,7 +411,7 @@
 					});
 
 					// 刷新区域
-					 getAreaList()
+					getAreaList()
 				})
 			}
 			areaShow.value = false
@@ -295,7 +419,7 @@
 	}
 
 	/* 获取区域列表 */
-	const  getAreaList = async () => {
+	const getAreaList = async () => {
 		areaList.value = []
 		let list = await requestApi('home-index', queryParams)
 
@@ -309,6 +433,10 @@
 	/* 关闭弹出层 */
 	const closeAreaPopup = () => {
 		areaShow.value = false
+	}
+
+	const closeChartPopup = () => {
+		chartShow.value = false
 	}
 
 	/* 编辑区域 */
@@ -337,7 +465,7 @@
 			await requestApi('home', deleteParams.value, { method: 'DELETE' }, true)
 				.then(res => {
 					// 刷新区域
-					 getAreaList()
+					getAreaList()
 				}).catch(() => {
 					uni.showToast({
 						title: '删除失败',
@@ -354,17 +482,17 @@
 			confirmDelete.value = false
 		}
 	}
-	
+
 	/* 获取房间信息 */
 	const getHome = async id => {
-		homeDetail.value = await requestApi('home', {id}, {}, true)
-		
+		homeDetail.value = await requestApi('home', { id }, {}, true)
+
 		// 设置查询条件pid和表单 pid
 		queryParams.pid = homeDetail.value.id
 		areaForm.value.pid = homeDetail.value.id
-		
+
 		// 获取区域列表
-		 getAreaList()
+		getAreaList()
 	}
 
 	/* 跳转区域 */
@@ -372,7 +500,68 @@
 		let url = "./materials?id=" + id
 		uni.navigateTo({ url })
 	}
-	
+
+	/* 展示图表 */
+	const showChart = item => {
+		chartShow.value = true
+		chartMarterials.value = item
+
+		// 处理图表数据
+		handleChartData()
+	}
+
+	/* 处理图表数据 */
+	const handleChartData = () => {
+		chartPickerLoading.value = true
+		let data = {
+			categories: chartMarterials.value.map(i => i.name)
+		}
+
+		switch (chartTypes[0][chartPickerValue.value].type) {
+			case 'pie':
+				data.series = [{
+					data: chartMarterials.value.map(i => { return { name: i.name, value: i.num } })
+				}]
+				break
+			case 'radar':
+				data.series = [{
+					name: "数量",
+					data: chartMarterials.value.map(i => i.num)
+				}]
+				break
+			case 'column':
+			    // 修改平均值
+				let avg = parseInt(average(chartMarterials.value.map(i => i.num)))
+			    chartTypes[0][chartPickerValue.value].opts.extra.markLine.data = [{ value: avg, showLabel: true }]
+				data.series = [{
+					name: "数量",
+					data: chartMarterials.value.map(i => i.num)
+				}]
+				break
+		}
+
+		chartData.value = JSON.parse(JSON.stringify(data));
+		chartPickerLoading.value = false
+	}
+
+	/* 选择器操作 */
+	const confirmChartPicker = () => {
+		chartPicker.value = false
+	}
+
+	const cancelChartPicker = () => {	
+		chartPicker.value = false
+	}
+
+	const changeChartPicker = e => {
+		let { index } = e
+		if (index != chartPickerValue.value) {
+			chartPickerValue.value = index
+			handleChartData()
+			chartPicker.value = false
+		}
+	}
+
 	/* 初始化数据 */
 	const initData = () => {
 		areaForm.value = {
@@ -381,11 +570,14 @@
 			name: "",
 			pic_url: ""
 		}
-		
+
 		uploadPhotos.value = []
-		
-		deleteParams.value = {id: null, name: ""}
+
+		deleteParams.value = { id: null, name: "" }
 	}
+	
+	/* 计算数字数组平均值 */
+	const average = arr => arr.reduce((acc, val) => acc + val, 0) / arr.length
 </script>
 
 <style lang="scss" scoped>
@@ -606,6 +798,74 @@
 				align-items: center;
 				min-height: 100upx;
 				justify-content: space-between;
+			}
+		}
+
+		.footer {
+			padding: 10rpx 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+
+	.chartPopup {
+		background: #fff;
+		padding: 20rpx;
+		width: 100vw;
+		border-radius: 30rpx;
+		overflow: hidden;
+
+		.popHeader {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.title {
+				display: flex;
+				align-items: center;
+				color: $text-font-color-2;
+				font-size: 26rpx;
+			}
+
+			.close {
+				padding: 6rpx;
+			}
+		}
+
+		.content {
+			display: flex;
+			padding: 30rpx 0;
+			justify-content: center;
+			align-items: center;
+
+			.text {
+				padding-left: 10rpx;
+				color: #ffca3e;
+				width: 80rpx;
+				line-height: 1em;
+				text-align: right;
+			}
+
+			.row {
+				display: flex;
+				padding: 16rpx 0;
+				font-size: 32rpx;
+				line-height: 1.7em;
+				align-items: center;
+				min-height: 100upx;
+				justify-content: space-between;
+			}
+
+			.charts-box {
+				width: 100%;
+				height: 300px;
+			}
+
+			.charts-icon {
+				position: absolute;
+				bottom: 20rpx;
+				right: 0rpx;
 			}
 		}
 
