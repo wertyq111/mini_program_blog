@@ -1,6 +1,6 @@
 <template>
 	<view class="contaier">
-		<home-header title="我的房屋" />
+		<home-header title="我的房屋" :searchShow="true" searchUrl="/pages/search/material-search" />
 		<view class="wrap">
 			<view class="page-box">
 				<template v-if="homeList && homeList.length > 0">

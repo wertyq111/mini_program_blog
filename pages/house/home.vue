@@ -1,6 +1,6 @@
 <template>
 	<view class="contaier" v-if="homeDetail">
-		<home-header :title="homeDetail.name" :url="homeDetail.picUrl" />
+		<home-header :title="homeDetail.name" :url="homeDetail.picUrl" :searchShow="true" />
 		<view class="wrap">
 			<view class="page-box">
 				<template v-if="areaList && areaList.length > 0">

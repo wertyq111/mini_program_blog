@@ -4,7 +4,7 @@
 			<view class="top-bg top-center-bg" :style="'background-image: url(' + url + ');'">
 				<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 			</view>
-			<go-to :is-back="true" backClass="login" />
+			<go-to :is-back="true" backClass="login" :searchShow="searchShow" :searchUrl="searchUrl" />
 		</view>
 
 		<view style="width: 100% ;position: absolute; top: 200rpx;">
@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+	import { getStatusBarHeight, getTitleBarHeight, getNavBarHeight } from '@/utils/system.js'
 	const titleString = ref("")
 	const props = defineProps({
 		title: {
@@ -29,6 +30,14 @@
 		url: {
 			type: String,
 			default: "https://cdn.chouy.xyz/login/logo.png"
+		},
+		searchShow: {
+			type: Boolean,
+			default: false
+		},
+		searchUrl: {
+			type: String,
+			default: "/pages/search/search"
 		}
 	})
 	

@@ -18,11 +18,7 @@
 </template>
 
 <script setup>
-	import {
-		getStatusBarHeight,
-		getTitleBarHeight,
-		getNavBarHeight
-	} from '@/utils/system.js'
+	import { getStatusBarHeight, getTitleBarHeight, getNavBarHeight } from '@/utils/system.js'
 
 	defineProps({
 		title: {

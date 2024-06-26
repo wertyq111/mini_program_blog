@@ -1,12 +1,22 @@
 <template>
-	<view class="goBack"  :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})" @click="goBack()">
-		<uni-icons type="back" :color="isBack ? '#333' : '#fff'" size="20" />
+	<view class="content">
+		<view class="goBack" :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})"
+			@click="goBack()">
+			<uni-icons type="back" :color="isBack ? '#333' : '#fff'" size="20" />
+		</view>
+		<navigator :url="searchUrl">
+			<view class="search" :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})">
+				<uni-icons class="icon" type="search" color="#888" size="18" />
+				<text class="text">搜索</text>
+			</view>
+		</navigator>
 	</view>
+
 </template>
 
 <script setup>
 	import { onMounted } from 'vue';
-import { getStatusBarHeight } from '@/utils/system.js';
+	import { getStatusBarHeight } from '@/utils/system.js';
 
 	const props = defineProps({
 		url: {
@@ -20,11 +30,19 @@ import { getStatusBarHeight } from '@/utils/system.js';
 		backClass: {
 			type: String,
 			default: "preview"
+		},
+		searchShow: {
+			type: Boolean,
+			default: false
+		},
+		searchUrl: {
+			type: String,
+			default: "/pages/search/search"
 		}
 	})
-	
+
 	//const emits = defineEmits([ "doClose" ]);
-	
+
 	const customStyle = ref({
 		'preview': {
 			position: "absolute",
@@ -41,7 +59,7 @@ import { getStatusBarHeight } from '@/utils/system.js';
 
 	/* 返回上一页或者跳转到制定地址 */
 	const goBack = () => {
-		if(props.url) {
+		if (props.url) {
 			uni.reLaunch({
 				url: props.url
 			})
@@ -49,7 +67,7 @@ import { getStatusBarHeight } from '@/utils/system.js';
 			uni.navigateBack()
 		}
 	}
-	
+
 	/* 调用父组件的关闭方法，用来处理返回跳转时当前页面正在执行的方法 */
 	// const doClose = () => {
 	// 	emit('doClose');
@@ -57,19 +75,44 @@ import { getStatusBarHeight } from '@/utils/system.js';
 </script>
 
 <style lang="scss" scoped>
-	/* 返回图标基本样式 */
-	.goBack {
-		width: 38px;
-		height: 38px;
-		left: 30rpx;
-		margin-left: 0;
-		border-radius: 100px;
-		top: 0;
-		backdrop-filter: blur(10rpx);
-		border: 1rpx solid rgba(255, 255, 255, 0.3);
+	.content {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		/* 返回图标基本样式 */
+		.goBack {
+			width: 38px;
+			height: 38px;
+			left: 30rpx;
+			margin-left: 0;
+			border-radius: 100px;
+			top: 0;
+			backdrop-filter: blur(10rpx);
+			border: 1rpx solid rgba(255, 255, 255, 0.3);
+		}
+
+		.search {
+			position: absolute;
+			width: 220rpx;
+			height: 50rpx;
+			border-radius: 60rpx;
+			background: rgba(255, 255, 255, 0.4);
+			border: 1px solid #fff;
+			margin-left: -300rpx;
+			margin-top: 10rpx;
+			color: #999;
+			font-size: 28rpx;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				margin-left: 5rpx;
+			}
+
+			.text {
+				padding-left: 10rpx;
+			}
+		}
 	}
-	
 </style>
