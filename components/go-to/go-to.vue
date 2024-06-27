@@ -2,9 +2,9 @@
 	<view class="content">
 		<view class="goBack" :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})"
 			@click="goBack()">
-			<uni-icons type="back" :color="isBack ? '#333' : '#fff'" size="20" />
+			<uni-icons :style="{position: 'absolute', left: '15rpx', top: '12rpx'}" type="back" :color="isBack ? '#333' : '#fff'" size="20" />
 		</view>
-		<navigator :url="searchUrl">
+		<navigator v-if="searchShow" :url="searchUrl">
 			<view class="search" :style="Object.assign({}, customStyle[backClass], {top: getStatusBarHeight() + 'px'})">
 				<uni-icons class="icon" type="search" color="#888" size="18" />
 				<text class="text">搜索</text>
@@ -99,8 +99,8 @@
 			border-radius: 60rpx;
 			background: rgba(255, 255, 255, 0.4);
 			border: 1px solid #fff;
-			margin-left: -300rpx;
-			margin-top: 10rpx;
+			margin-left: -280rpx;
+			margin-top: 20rpx;
 			color: #999;
 			font-size: 28rpx;
 			display: flex;

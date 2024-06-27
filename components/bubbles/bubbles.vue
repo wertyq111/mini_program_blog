@@ -4,9 +4,12 @@
 </template>
 
 <script setup>
+	import { FILE_URL } from '@/utils/config';
+	
 	let queue = {}
 	let ctx = null
 	let timer = 0
+	let imageList = []
 
 	const props = defineProps({
 		height: {
@@ -25,6 +28,15 @@
 
 	/* 挂载处理 */
 	onMounted(() => {
+		// 获取所有点赞图片
+		for(let i = 1; i <= 33; i++) {
+			uni.downloadFile({
+				url: FILE_URL + "/static/likeFx/" + getRandomInt(1, 33) + ".png",
+				success: res => {
+					imageList[i] = res.tempFilePath
+				}
+			})	
+		}
 		ctx = uni.createCanvasContext(props.canvasId)
 	})
 	
@@ -35,13 +47,14 @@
 
 	/* 点赞 */
 	const likeClick = () => {
-		let image = "/static/images/likeFx/" + getRandomInt(1, 33) + ".png";
+		let currRandomId = getRandomInt(1, 33)
+
 		let anmationData = {
 			id: new Date().getTime(),
 			timer: 0,
 			opacity: 0,
 			pathData: generatePathData(),
-			image: image,
+			image: imageList[currRandomId],
 			factor: {
 				// speed: 0.0009, // 运动速度，值越小越慢
 				// t: 0.4//  贝塞尔函数系数，当为0，就是从无到有，这时候屏幕高度也要调一下
@@ -55,7 +68,8 @@
 			queue[anmationData.id] = anmationData;
 			bubbleAnimate();
 		}
-		
+			
+			
 	}
 
 	/* 获取最大最小随机值 */

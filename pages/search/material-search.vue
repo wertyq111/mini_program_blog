@@ -128,7 +128,6 @@ const searchData = async () => {
 	}
 	try {
 		let res = await requestApi("material-index", params)
-		console.log(res);
 		materialList.value = [...materialList.value, ...res]
 		uni.setStorageSync("storgmaterialList", materialList.value)
 		if(res.length < queryParams.value.pageSize) noData.value = true

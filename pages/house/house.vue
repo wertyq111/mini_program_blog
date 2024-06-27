@@ -4,43 +4,45 @@
 		<view class="wrap">
 			<view class="page-box">
 				<template v-if="homeList && homeList.length > 0">
-					<view class="order" v-for="home in homeList" :key="home.id">
-						<view class="top">
-							<view class="left">
-								<uni-text class="cuIcon-titles text-blue"></uni-text>
-								<view class="store">{{ home.name }}</view>
-								<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
-							</view>
-							<view class="right">
-								<view class="progressBox">
-									<up-icon name="edit-pen" size="25" @click="editHome(home)"></up-icon>
+					<view class="order" :style="{backgroundImage: 'url(' + home.picUrl + ')', backgroundSize: 'cover'}" v-for="home in homeList" :key="home.id">
+						<view class="mask">
+							<view class="top">
+								<view class="left">
+									<uni-text class="cuIcon-titles text-blue"></uni-text>
+									<view class="store">{{ home.name }}</view>
+									<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 								</view>
-								<view class="progressBox">
-									<up-icon name="trash" size="25" @click="confirmDeleteHome(home)"></up-icon>
-								</view>
-							</view>
-						</view>
-						<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
-						<view class="bottom">
-							<view v-if="home.children">
-								<view class="cu-avatar-group" style="padding-left: 24rpx;">
-									
-								</view>
-								<view class="cu-avatar-group" style="padding-left: 24rpx;">
-									<view class="cu-avatar round" v-for="child in home.children" :key="child.id" :style="[{ backgroundImage:'url(' + child.picUrl + ')' }]">
-										<!-- <view class="cu-avatar round" v-for="child in home.children" :key="child.id" >
-											<up-avatar :text="child.name" fontSize="18" randomBgColor />
-										</view> -->
+								<view class="right">
+									<view class="progressBox">
+										<up-icon name="edit-pen" size="25" @click="editHome(home)"></up-icon>
 									</view>
-					
+									<view class="progressBox">
+										<up-icon name="trash" size="25" @click="confirmDeleteHome(home)"></up-icon>
+									</view>
 								</view>
-								<text class="text-blue text-shadow">区域数量: {{ home.children.length}} 个</text>
 							</view>
-							<view v-else>
-								<text class="text-blue text-shadow">暂无区域</text>
-							</view>
-							<view class="btnBox">
-								<view @click="goHome(home.id)" class="evaluate btn">房间信息</view>
+							<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
+							<view class="bottom">
+								<view v-if="home.children">
+									<view class="cu-avatar-group" style="padding-left: 24rpx;">
+										
+									</view>
+									<view class="cu-avatar-group" style="padding-left: 24rpx;">
+										<view class="cu-avatar round" v-for="child in home.children" :key="child.id" :style="[{ backgroundImage:'url(' + child.picUrl + ')' }]">
+											<!-- <view class="cu-avatar round" v-for="child in home.children" :key="child.id" >
+												<up-avatar :text="child.name" fontSize="18" randomBgColor />
+											</view> -->
+										</view>
+												
+									</view>
+									<text class="text-blue text-shadow">区域数量: {{ home.children.length}} 个</text>
+								</view>
+								<view v-else>
+									<text class="text-blue text-shadow">暂无区域</text>
+								</view>
+								<view class="btnBox">
+									<view @click="goHome(home.id)" class="evaluate btn">房间信息</view>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -384,17 +386,27 @@
 <style lang="scss" scoped>
 	.order {
 		width: 710rpx;
-		background-image: repeating-linear-gradient(45deg, #beecd8, #F9F8EB);
+		//background-image: repeating-linear-gradient(45deg, #beecd8, #F9F8EB);
+		background-color: rgba(221, 221, 221, 0.5);
 		margin: 20rpx auto;
 		border-radius: 20rpx;
 		box-sizing: border-box;
-		padding: 20rpx;
 		font-size: 28rpx;
 		box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.10);
+		
+		.mask {
+			width: 100%;
+			height: 100%;
+			padding: 20rpx;
+			border-radius: 20rpx;
+			background-color: rgba(221, 221, 221, 0.5);
+			backdrop-filter: blur(6px);
+		}
 
 		.top {
 			display: flex;
 			justify-content: space-between;
+
 
 			.left {
 				display: flex;

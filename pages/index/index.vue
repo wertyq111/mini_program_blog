@@ -77,16 +77,7 @@
 </template>
 
 <script setup>
-	import {
-		ref
-	} from 'vue';
-	import {
-		requestApi
-	} from '@/api/apis.js';
-	import {
-		onShareAppMessage,
-		onShareTimeline
-	} from "@dcloudio/uni-app"
+	import { requestApi } from '@/api/apis.js';
 
 	const bannerList = ref([]);
 	const noticeList = ref([]);

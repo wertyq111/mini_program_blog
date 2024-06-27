@@ -1,40 +1,42 @@
 <template>
 	<view class="contaier" v-if="homeDetail">
-		<home-header :title="homeDetail.name" :url="homeDetail.picUrl" :searchShow="true" />
+		<home-header :title="homeDetail.name" :url="homeDetail.picUrl" :searchShow="true" searchUrl="/pages/search/material-search" />
 		<view class="wrap">
 			<view class="page-box">
 				<template v-if="areaList && areaList.length > 0">
-					<view class="order" v-for="area in areaList" :key="area.id">
-						<view class="top">
-							<view class="left">
-								<uni-text class="cuIcon-titles text-blue"></uni-text>
-								<view class="store">{{ area.name }}</view>
-								<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
-							</view>
-							<view class="right">
-								<view class="progressBox">
-									<image v-if="area.materials && area.materials.length > 0"
-										@click="showChart(area.materials)" :style="{width: '50rpx', height: '50rpx'}"
-										src="@/static/images/icons/chart.png" mode="aspectFill"></image>
+					<view class="order" :style="{backgroundImage: 'url(' + area.picUrl + ')', backgroundSize: 'cover'}" v-for="area in areaList" :key="area.id">
+						<view class="mask">
+							<view class="top">
+								<view class="left">
+									<uni-text class="cuIcon-titles text-blue"></uni-text>
+									<view class="store">{{ area.name }}</view>
+									<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
 								</view>
-								<view class="progressBox">
-									<up-icon name="edit-pen" size="25" @click="editArea(area)"></up-icon>
+								<view class="right">
+									<view class="progressBox">
+										<image v-if="area.materials && area.materials.length > 0"
+											@click="showChart(area.materials)" :style="{width: '50rpx', height: '50rpx'}"
+											src="@/static/images/icons/chart.png" mode="aspectFill"></image>
+									</view>
+									<view class="progressBox">
+										<up-icon name="edit-pen" size="25" @click="editArea(area)"></up-icon>
+									</view>
+									<view class="progressBox">
+										<up-icon name="trash" size="25" @click="confirmDeleteArea(area)"></up-icon>
+									</view>
 								</view>
-								<view class="progressBox">
-									<up-icon name="trash" size="25" @click="confirmDeleteArea(area)"></up-icon>
+							</view>
+							<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
+							<view class="bottom">
+								<view v-if="area.materials">
+									<text class="text-blue text-shadow">物品总数: {{ area.materials.length}} 件</text>
 								</view>
-							</view>
-						</view>
-						<u-line color="#f1f1f1" margin="24rpx 0 15rpx 0"></u-line>
-						<view class="bottom">
-							<view v-if="area.materials">
-								<text class="text-blue text-shadow">物品总数: {{ area.materials.length}} 件</text>
-							</view>
-							<view v-else>
-								<text class="text-blue text-shadow">暂无物品</text>
-							</view>
-							<view class="btnBox">
-								<view @click="goArea(area.id)" class="evaluate btn">区域信息</view>
+								<view v-else>
+									<text class="text-blue text-shadow">暂无物品</text>
+								</view>
+								<view class="btnBox">
+									<view @click="goArea(area.id)" class="evaluate btn">区域信息</view>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -587,9 +589,17 @@
 		margin: 20rpx auto;
 		border-radius: 20rpx;
 		box-sizing: border-box;
-		padding: 20rpx;
 		font-size: 28rpx;
 		box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.10);
+		
+		.mask {
+			width: 100%;
+			height: 100%;
+			padding: 20rpx;
+			border-radius: 20rpx;
+			background-color: rgba(221, 221, 221, 0.5);
+			backdrop-filter: blur(6px);
+		}
 
 		.top {
 			display: flex;
