@@ -1,9 +1,9 @@
 <template>
 	<view class="contaier login">
-		<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
+		<view class="top-bg top-center-bg" :style="'background-image: url(https://www.chouy.xyz:4431/static/login/logo.png);'">
 			<view class="text-bold text-xxxl">子曰小窝</view>
 			<view class="margin-top-xs">欢迎使用，请先登录</view>
-			<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+			<image src='https://www.chouy.xyz:4431/static/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 		</view>
 
 		<view class="input-box padding-lr">

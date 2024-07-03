@@ -3,9 +3,7 @@
 	</view>
 </template>
 
-<script setup>
-	import { FILE_URL } from '@/utils/config';
-	
+<script setup>	
 	let queue = {}
 	let ctx = null
 	let timer = 0
@@ -31,7 +29,7 @@
 		// 获取所有点赞图片
 		for(let i = 1; i <= 33; i++) {
 			uni.downloadFile({
-				url: FILE_URL + "/static/likeFx/" + getRandomInt(1, 33) + ".png",
+				url: "https://www.chouy.xyz:4431/static/likeFx/" + getRandomInt(1, 33) + ".png",
 				success: res => {
 					imageList[i] = res.tempFilePath
 				}

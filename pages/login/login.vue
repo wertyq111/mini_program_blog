@@ -1,11 +1,11 @@
 <template>
 	<view class="mainBox bg-white login">
 		<view v-if="canIUse">
-			<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
+			<view class="top-bg top-center-bg" :style="'background-image: url(https://www.chouy.xyz:4431/static/login/logo.png);'">
 				<go-to :is-back="true" backClass="login" />
 				<image class="logoImg" :src="avatarUrl"></image>
 				<view class="logoName text-black text-bold text-xxxl">登录</view>
-				<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+				<image src='https://www.chouy.xyz:4431/static/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 			</view>
 
 			<view class="padding text-center margin-top-xl">

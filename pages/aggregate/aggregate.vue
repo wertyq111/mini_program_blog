@@ -1,8 +1,8 @@
 <template>
 	<view class="components-home">
 		<view class="login">
-			<view class="top-bg top-center-bg" :style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
-				<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+			<view class="top-bg top-center-bg" :style="'background-image: url(https://www.chouy.xyz:4431/static/login/logo.png);'">
+				<image src='https://www.chouy.xyz:4431/static/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 			</view>
 		</view>
 

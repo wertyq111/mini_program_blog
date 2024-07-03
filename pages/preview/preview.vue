@@ -128,7 +128,7 @@
 	classList.value = storgClassList.map(item => {
 		return {
 			...item,
-			picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
+			picurl: item.url
 		}
 	})
 
@@ -141,7 +141,7 @@
 			classList.value = classList.value.map(item => {
 				return {
 					...item,
-					picurl: item.smallPicUrl.replace("?imageMogr2/thumbnail/!30p", "")
+					picurl: item.url
 				}
 			})
 		} else {

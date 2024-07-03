@@ -29,7 +29,7 @@
 		</view>
 
 		<button class='' open-type="contact">
-			<image src='https://cdn.chouy.xyz/static/logo.png' class='share-img png round shadow-lg bg-white' mode='aspectFit'>
+			<image src='https://www.chouy.xyz:4431/static/logo.png' class='share-img png round shadow-lg bg-white' mode='aspectFit'>
 			</image>
 		</button>
 	</view>

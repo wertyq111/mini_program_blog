@@ -2,7 +2,7 @@
 	<view class="text-xxl" style="position: relative;">
 		<view class="login">
 			<view class="top-bg top-center-bg" :style="'background-image: url(' + url + ');'">
-				<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+				<image src='https://www.chouy.xyz:4431/static/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 			</view>
 			<go-to :is-back="true" backClass="login" :searchShow="searchShow" :searchUrl="searchUrl" />
 		</view>
@@ -29,7 +29,7 @@
 		},
 		url: {
 			type: String,
-			default: "https://cdn.chouy.xyz/login/logo.png"
+			default: "https://www.chouy.xyz:4431/static/login/logo.png"
 		},
 		searchShow: {
 			type: Boolean,

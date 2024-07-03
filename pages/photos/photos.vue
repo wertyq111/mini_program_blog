@@ -3,8 +3,8 @@
 		<view class="text-xxl" style="height: 770rpx; position: relative;">
 			<view class="login">
 				<view class="top-bg top-center-bg"
-					:style="'background-image: url(https://cdn.chouy.xyz/login/logo.png);'">
-					<image src='https://cdn.chouy.xyz/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
+					:style="'background-image: url(https://www.chouy.xyz:4431/static/login/logo.png);'">
+					<image src='https://www.chouy.xyz:4431/static/login/wave-2.gif' mode='scaleToFill' class='gif-wave'></image>
 				</view>
 				<go-to :is-back="true" backClass="login" />
 			</view>
